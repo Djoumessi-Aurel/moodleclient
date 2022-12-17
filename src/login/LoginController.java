@@ -97,13 +97,14 @@ public class LoginController implements Initializable {
             try{
                 serverReachable = Moodleclient.serverReachable();
                 accountHelper = new AccountHelper();
-                
+                                
                 if(Moodleclient.serverReachable()){
 
                     try{
                        System.out.println("reached");
-                       System.out.println("username="+username+";password="+password);
+                       
                        Map<String, String> userData = accountHelper.getUserData(username, password);
+                       System.out.println("userData : "+userData.toString());
                        Byte b;
 
                        if(isStudent){
@@ -111,7 +112,7 @@ public class LoginController implements Initializable {
                        }else{
                            b = 0;
                        }
-                       System.out.println(userData.get("remoteid"));
+                       System.out.println("RemoteId : "+userData.get("remoteid"));
 
                        Moodleclient.user = accountHelper.saveAccount(username, password, userData.get("token"), b, Integer.valueOf((String)userData.get("remoteid")));
                        
@@ -140,6 +141,7 @@ public class LoginController implements Initializable {
 
                   this.errMsg.setText("Server not reachable");
                   this.errMsg.setVisible(true);
+                  System.out.println("not reached");   // ajout de ma part
 
                }
 
@@ -160,6 +162,7 @@ public class LoginController implements Initializable {
     private void handleServerBtn(ActionEvent event) throws Exception {
         
         String serverAddress = ServerSettingsAB.display();
+        System.out.println("Adresse du serveur=" + serverAddress);
         
         if(serverAddress.isEmpty()){} //The user choose cancel so we do nothing
         

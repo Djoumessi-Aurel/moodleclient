@@ -41,8 +41,15 @@ public class AccountHelper {
         
         Map<String, String> result = new HashMap<String, String>();
         
-        String login_url_str = moodleclient.Moodleclient.serverAddress + "login/token.php?username=" + username + "&password=" + password + "&service=moodle_mobile_app";
-            
+        String serverAdd = moodleclient.Moodleclient.serverAddress;
+        
+        // si l'adresse du serveur fournie par l'utilisateur ne se termine pas par /, alors on l'ajoute
+        if(!serverAdd.substring(serverAdd.length()-1, serverAdd.length()).equals("/")){
+            serverAdd += "/";
+        }
+                
+        String login_url_str = serverAdd + "/login/token.php?username=" + username + "&password=" + password + "&service=moodle_mobile_app";
+        
         URL login_url = new URL(login_url_str);
             
         HttpURLConnection con = (HttpURLConnection) login_url.openConnection();
@@ -51,7 +58,11 @@ public class AccountHelper {
         con.connect();
             
         int status = con.getResponseCode();
-        String user_token; 
+        
+        System.out.println("Status : "+status);
+        
+        String user_token = "";
+        String remote_id = "";
             
         if(status == 200){
             //the server is reachable
@@ -63,22 +74,30 @@ public class AccountHelper {
             while(sc.hasNext()){
                 res += sc.nextLine();
             }
-                
+            
+            System.out.println("res : "+res);
             JSONParser parse = new JSONParser();
             JSONObject jobj = (JSONObject) parse.parse(res);
-                System.out.println(jobj);
+                            
             if(jobj.keySet().contains("token")){
                 //the login credentials are correct
                 //get the user's token
                 user_token = jobj.get("token").toString();
-                System.out.println("token="+user_token);
+                
+                
+                // Ayant recuperer le token, on va l'utiliser pour avoir le remotId
+                String url = serverAdd + "webservice/rest/server.php?wstoken="+user_token+"&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json"; // ajout de ma part pour recuperer le remoteid
+                remote_id = RemoteId.getRemoteId(url);
+                System.out.println("remote_id : "+ remote_id);
+                //
                 
                 result.put("token", user_token);
-                //result.put("remoteid", jobj.get("remoteid").toString());//LIGNE DE L'ANCIEN CODE
-                result.put("remoteid", "1");
+                result.put("remoteid", remote_id);
+                System.out.println("Utilisateur récupéré: " + result.toString());
+                //result.put("remoteid", jobj.get("remoteid").toString());
                 
             }else{
-                
+       
                 throw new WrongCredentialsException("Wrong credentials");
             } 
             

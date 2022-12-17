@@ -138,14 +138,28 @@ public class TopDashboardController implements Initializable {
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
             
+            /*petit test*/System.out.print("La taille de la liste est : "+privateFiles.size()+"\n");
+            
             for(Object obj: privateFiles){
                 
                 PrivateFile privateFile = (PrivateFile) obj;
                 
+                //voyons le contenu de cet objet
+                /*petit test*/System.out.println("Contenu de l'objet obj : "+privateFile.getHashName());
+                
                 //build the url to update the file in the user's draft
-                String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
+                //String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
+                
+                //build the url to update the file in the user's draft
+                String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                //String request = "cd files && curl -X POST -F \"file_1=@./1671013096452_Chapitre1.pptx\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                
+                /*petit test*/System.out.println(request);
                 
                 String requestResponse = new RequestCommand(request).runCommand();
+                
+                // Affichons un peu le resultat de cette commande
+                /*petit test*/System.out.println(requestResponse);
                 
                 //build the request to move the file to the private area of the user
                 JSONParser parser = new JSONParser();
@@ -221,7 +235,7 @@ public class TopDashboardController implements Initializable {
             
             
             //delete the downloaded files
-            new CommandRunner("rm ./files/*").start();
+            new CommandRunner(" rmdir /s /q files && mkdir files").start();
             
             moodleclient.Moodleclient.clearLocalDatabase();
             
@@ -268,13 +282,13 @@ public class TopDashboardController implements Initializable {
         if(this.serverReachable){
             textConnexion = "You are connected to the server.";
             Tooltip toolTextConnexion = new Tooltip(textConnexion);
-            loginIndic.setTooltip(toolTextConnexion);
+            //loginIndic.setTooltip(toolTextConnexion);
             circleIndic.setFill(Color.valueOf("37CA41")); //the color is green
 
         } else{
             textConnexion = "You are not connected to the server.";
             Tooltip toolTextConnexion = new Tooltip(textConnexion);
-            loginIndic.setTooltip(toolTextConnexion);
+            //loginIndic.setTooltip(toolTextConnexion);
             circleIndic.setFill(Color.valueOf("FA5F57")); //the color is red
         }
     }
@@ -305,7 +319,7 @@ public class TopDashboardController implements Initializable {
                     }
                 }
                 
-            }, 0, 5000);
+            }, 0, 3000);
         }
     }
     

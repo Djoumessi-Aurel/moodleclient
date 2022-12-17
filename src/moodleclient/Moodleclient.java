@@ -120,7 +120,7 @@ public class Moodleclient extends Application {
     
     //function to check if the server is reachable
     public static boolean serverReachable() throws MalformedURLException, IOException{
-            
+                    
         URL url = new URL(serverAddress);
             
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -195,7 +195,7 @@ public class Moodleclient extends Application {
         new FilesCleaner().start();
     }
     
-    //class used to launch a file
+    //class used to clean/delete files
     static class FilesCleaner extends Thread{
         
         public FilesCleaner(){
@@ -207,7 +207,10 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            processBuilder.command("bash", "-c", "rm ./files/*" + " &");
+            //processBuilder.command("bash", "-c", "rm ./files/*" + " &"); //On vide le dossier files //Commande Linux
+            //on supprime le dossier files et on le recree // processBuilder.command("cmd.exe", "/c", " rmdir /s /q files && mkdir files"); //Commande Windows
+            System.out.println("Commande: " + " del /s /q \".\\files\\*\"");
+            processBuilder.command("cmd.exe", "/c", " del /s /q \".\\files\\*\""); //On vide le dossier files //Commande Windows
 
             try{
                 Process process = processBuilder.start();
@@ -220,6 +223,7 @@ public class Moodleclient extends Application {
 
                 while((line = reader.readLine()) != null){
                     output.append(line + "\n");
+                    System.out.println(line + "\n");
                 }
 
                 int exitval = process.waitFor();
@@ -242,7 +246,7 @@ public class Moodleclient extends Application {
         }
     }
     
-    //class used to launch a file
+    //class used to launch a file/ classe utilisee pour lancer un fichier
     public static class FileLauncher extends Thread{
         
         public String fileName;
@@ -258,7 +262,10 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            processBuilder.command("bash", "-c", "xdg-open ./files/'" + fileName + "' &");
+            //processBuilder.command("bash", "-c", "xdg-open ./files/'" + fileName + "' &"); //Commande Linux
+            //processBuilder.command("cmd.exe", "/c", " cd files && "+fileName+" && cd ../"); //Commande Windows
+            System.out.println("Commande: " + "\"" + ".\\files\\" + fileName + "\"");
+            processBuilder.command("cmd.exe", "/c", "\"" + ".\\files\\" + fileName + "\""); //Commande Windows
 
             try{
                 Process process = processBuilder.start();

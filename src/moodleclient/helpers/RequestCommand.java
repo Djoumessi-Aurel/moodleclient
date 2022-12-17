@@ -25,7 +25,7 @@ public class RequestCommand {
         
         ProcessBuilder processBuilder = new ProcessBuilder();
 
-        processBuilder.command("bash", "-c", this.command + " &");
+        processBuilder.command("cmd.exe", "/c", " "+this.command);
 
         try{
             Process process = processBuilder.start();
