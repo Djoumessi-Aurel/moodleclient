@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="168.0" prefWidth="237.0" style="-fx-background-color: FFFFFF; -fx-border-color: #B4CFEC;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SCourseCard.CourseCardController">
+   <children>
+      <ImageView fitHeight="107.0" fitWidth="237.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/bg-prlx-big-1.jpg" />
+         </image>
+      </ImageView>
+      <Separator layoutX="19.0" layoutY="108.0" prefHeight="0.0" prefWidth="200.0" style="-fx-background-color: #B4CFEC;" />
+      <Label fx:id="courseName" layoutX="19.0" layoutY="127.0" prefHeight="17.0" prefWidth="200.0" text="Course name">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+   </children>
+   <effect>
+      <DropShadow />
+   </effect>
+</AnchorPane>

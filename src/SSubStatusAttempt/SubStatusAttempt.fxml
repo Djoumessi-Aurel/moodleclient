@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SSubStatusAttempt.SubStatusAttemptController">
+   <children>
+      <Label text="Submission status" textFill="#101111">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" left="4.0" />
+         </VBox.margin>
+      </Label>
+      <GridPane alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="153.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="345.0" minWidth="10.0" prefWidth="345.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <AnchorPane style="-fx-background-color: #F5F5F5;">
+               <children>
+                  <Label text="Submission status: ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #C3FDB8;" GridPane.columnIndex="1">
+               <children>
+                  <Label fx:id="subStatus" style="-fx-background-color: #C3FDB8;" text="Submitted for grading">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Due date: ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label fx:id="dueDate" text="Sunday, 28 November 2021, 12:00 AM">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.rowIndex="2">
+               <children>
+                  <Label text="Time remaining: ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Label layoutY="4.0" text="Assignment was submitted" textFill="#b92929">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.rowIndex="3">
+               <children>
+                  <Label text="Grading status: ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <Label fx:id="gradingStatus" text="Graded">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Label fx:id="time" text="11 hours 9 minutes late" textFill="#b92929" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="180.0" />
+               </GridPane.margin>
+            </Label>
+            <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.rowIndex="4">
+               <children>
+                  <Label text="File submissions:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <ListView fx:id="fileSubmitted" prefHeight="30.0" prefWidth="321.0" />
+               </children>
+            </AnchorPane>
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </GridPane>
+      <Separator prefHeight="4.0" prefWidth="442.0">
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" top="25.0" />
+         </VBox.margin></Separator>
+      <HBox alignment="CENTER">
+         <children>
+            <JFXButton fx:id="btnEditSub" style="-fx-background-color: #DCDCDC;" text="Edit submission">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXButton>
+            <Region prefHeight="29.0" prefWidth="67.0" />
+            <JFXButton fx:id="btnRemoveSub" style="-fx-background-color: #DCDCDC;" text="Remove submission">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXButton>
+         </children>
+         <VBox.margin>
+            <Insets top="25.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="You can still make change to your submission" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

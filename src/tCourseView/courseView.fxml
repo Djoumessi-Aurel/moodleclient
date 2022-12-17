@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1" fx:controller="tCourseView.CourseViewController">
+   <children>
+      <GridPane prefHeight="400.0" prefWidth="477.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="400.0" minHeight="10.0" prefHeight="165.0" vgrow="ALWAYS" />
+         </rowConstraints>
+         <children>
+            <VBox prefHeight="126.0" prefWidth="457.0" style="-fx-border-style: solid solid solid solid; -fx-border-color: #C0C0C0#C0C0C0 #C0C0C0#C0C0C0;">
+               <children>
+                  <HBox prefHeight="16.0" prefWidth="467.0">
+                     <children>
+                        <Label fx:id="courseName" text="Course name">
+                           <font>
+                              <Font name="Arial" size="36.0" />
+                           </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets right="10.0" top="8.0" />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/icons8-moodle.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets left="8.0" top="8.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton text="Dashboard /" textFill="#0c84fd">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton layoutX="10.0" layoutY="10.0" text="Courses / " textFill="#0c84fd">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="-10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton layoutX="10.0" layoutY="10.0" text="Course name" textFill="#0c84fd">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="-10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <Region HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="15.0" top="40.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="15.0" />
+               </GridPane.margin>
+            </VBox>
+            <VBox prefHeight="350.0" prefWidth="457.0" style="-fx-border-color: #C0C0C0#C0C0C0 #C0C0C0#C0C0C0;" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label text="Announcements">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="30.0" />
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../views/mLogo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <JFXButton text="Edit" textFill="#0f6cbf">
+                           <HBox.margin>
+                              <Insets right="15.0" top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="announcementContent" text="I am the content of the announcement haha." />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label prefHeight="30.0" prefWidth="246.0" text="Add an activity or resource" textFill="#0f6cbf">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../views/mLogo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" style="-fx-border-color: #C0C0C0#C0C0C0 #C0C0C0#C0C0C0; -fx-border-style: solid none none none;">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <HBox>
+                     <children>
+                        <Label text="Topic 1" textFill="#0c84fd">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <JFXButton text="Edit" textFill="#0f6cbf">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Topic 1" textFill="#0c84fd">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <JFXButton text="Edit" textFill="#0f6cbf">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="30.0" top="15.0" />
+                     </padding>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Topic 1" textFill="#0c84fd">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <JFXButton text="Edit" textFill="#0f6cbf">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="30.0" top="15.0" />
+                     </padding>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Topic 1" textFill="#0c84fd">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <JFXButton text="Edit" textFill="#0f6cbf">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" right="30.0" top="15.0" />
+                     </padding>
+                  </HBox>
+                  <Separator prefWidth="200.0" style="-fx-border-color: #C0C0C0#C0C0C0 #C0C0C0#C0C0C0; -fx-border-style: solid none none none;">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Separator>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets top="30.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="5.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>

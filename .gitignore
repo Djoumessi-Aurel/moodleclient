@@ -1,0 +1,6 @@
+dist
+build
+files
+nbproject
+src/hibernate.cfg.xml
+src/hibernate.reveng.xml 

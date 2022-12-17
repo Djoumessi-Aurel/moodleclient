@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="120.0" prefWidth="485.0" style="-fx-border-color: transparent transparent  D1D0CE transparent;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="STopicCard.TopicNoCardController">
+   <children>
+      <Label fx:id="topicName" layoutX="24.0" layoutY="14.0" text="Topic name" textFill="#101111">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="topicDesc" layoutX="39.0" layoutY="41.0" text="Description of the topic" />
+      <Label fx:id="ressource" layoutX="62.0" layoutY="71.0" text="CoursArduino.pdf" textFill="#1db1bc">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_pdf_16px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+   </children>
+</Pane>

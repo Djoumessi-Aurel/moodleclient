@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 juin 2022 05:48:45 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="moodleclient.entity.Users" table="users" catalog="moodleclientdb" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="username" type="string">
+            <column name="username" unique="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" />
+        </property>
+        <property name="token" type="string">
+            <column name="token" />
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="createdAt" length="19" not-null="true" />
+        </property>
+        <property name="updatedAt" type="timestamp">
+            <column name="updatedAt" length="19" not-null="true" />
+        </property>
+        <property name="serverUrl" type="string">
+            <column name="server_url" />
+        </property>
+        <property name="isSudent" type="java.lang.Byte">
+            <column name="is_sudent" />
+        </property>
+        <property name="remoteId" type="java.lang.Integer">
+            <column name="remoteId" />
+        </property>
+    </class>
+</hibernate-mapping>

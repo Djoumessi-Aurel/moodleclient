@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="529.0" prefWidth="700.0" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SSubmitAssignment.SubmitAssignmentController">
+   <children>
+      <BorderPane prefHeight="468.0" prefWidth="694.0" style="-fx-background-color: FFFFF2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <VBox prefHeight="414.0" prefWidth="165.0" style="-fx-background-color: #DCDCDC;" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton fx:id="btnDashboard" prefHeight="46.0" prefWidth="163.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Dashboard">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_speed_24px_2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnSiteHome" layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="163.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Site home">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_home_24px_2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnPrivateFiles" prefHeight="46.0" prefWidth="163.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Private files">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_file_16px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnAssignments" layoutX="10.0" layoutY="56.0" prefHeight="46.0" prefWidth="163.0" style="-fx-background-color: #357EC7; -fx-border-color: D1D0CE;" text="Assignments" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_task_24px_4.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCourses" layoutX="10.0" layoutY="102.0" prefHeight="46.0" prefWidth="163.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" text="My Courses">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_graduation_cap_26px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Label alignment="CENTER" prefHeight="49.0" prefWidth="163.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Course 1" textAlignment="CENTER" textFill="#788080">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_graduation_cap_26px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </children>
+            </VBox>
+         </left>
+         <top>
+            <AnchorPane prefHeight="47.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox prefHeight="44.0" prefWidth="242.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ImageView fitHeight="31.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/1200px-Moodle-logo.svg.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </HBox.margin>
+                                 <effect>
+                                    <Glow />
+                                 </effect>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="TOP_RIGHT" prefHeight="54.0" prefWidth="201.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons8_notification_26px_1.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label fx:id="username" prefHeight="25.0" prefWidth="89.0" style="-fx-content-display: #1589FF;" text="Username" textFill="#72b7fc">
+                                 <padding>
+                                    <Insets left="20.0" right="2.0" top="10.0" />
+                                 </padding>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets top="8.0" />
+                                 </HBox.margin>
+                                 <image>
+                                    <Image url="@../images/icons8_male_user_32px.png" />
+                                 </image>
+                              </ImageView>
+                              <MenuButton mnemonicParsing="false" prefHeight="12.0" prefWidth="13.0">
+                                <items>
+                                  <MenuItem fx:id="btnSettings" mnemonicParsing="false" text="Settings" />
+                                  <MenuItem fx:id="btnLogOut" mnemonicParsing="false" text="Log out " />
+                                </items>
+                                 <HBox.margin>
+                                    <Insets left="25.0" top="10.0" />
+                                 </HBox.margin>
+                              </MenuButton>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </top>
+         <center>
+            <AnchorPane prefHeight="462.0" prefWidth="525.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </BorderPane.margin>
+               <children>
+                  <VBox prefHeight="418.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Pane prefHeight="41.0" prefWidth="540.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;">
+                           <children>
+                              <Label fx:id="courseName" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="285.0" style="-fx-background-color: FFFFFF;" text="Course name" textFill="#0a82c3">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="4.0" right="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="63.0" prefWidth="158.0">
+                           <children>
+                              <VBox layoutY="1.0" prefHeight="64.0" prefWidth="158.0">
+                                 <children>
+                                    <Label fx:id="assgnimentName" text="Nom du devoir">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons8_pencil_48px_1.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Label>
+                                    <Label fx:id="assgnimentDesc" text="Description du devoir">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="23.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="assignmentDoc" text="Devoir" textFill="#27a0d0">
+                                       <graphic>
+                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons8_pdf_16px.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <VBox.margin>
+                                          <Insets left="22.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Pane>
+                        <JFXTextArea fx:id="list" prefHeight="77.0" prefWidth="523.0" />
+                        <Label text="Files submissions">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="5.0" top="20.0" />
+                           </VBox.margin>
+                        </Label>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="242.0" prefWidth="523.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ListView prefHeight="222.0" prefWidth="483.0" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                    <HBox alignment="CENTER" prefWidth="471.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <JFXButton fx:id="fileChooser" onAction="#handleBtnChooser" prefHeight="38.0" prefWidth="86.0" style="-fx-background-color: #DCDCDC;" text="Choose files">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton fx:id="btnSave" prefHeight="38.0" prefWidth="98.0" style="-fx-background-color: #357EC7;" text="Save changes" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="20.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton fx:id="btnCancel" prefHeight="38.0" prefWidth="57.0" style="-fx-background-color: #DCDCDC;" text="Cancel">
+                                             <HBox.margin>
+                                                <Insets left="210.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

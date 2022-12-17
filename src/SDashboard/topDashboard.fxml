@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.TopDashboardController">
+   <children>
+      <HBox prefHeight="33.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="60.0" prefWidth="122.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="31.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/1200px-Moodle-logo.svg.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                     </HBox.margin>
+                     <effect>
+                        <Glow />
+                     </effect>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="54.0" prefWidth="201.0" HBox.hgrow="ALWAYS">
+               <children>
+
+                  <Label fx:id="syncingText" text="syncing..." textFill="#eead08">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" top="10.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="5.0" top="7.0" />
+                     </HBox.margin>
+                  </Label>
+                  <JFXButton fx:id="syncBtn" contentDisplay="GRAPHIC_ONLY" onAction="#handleSyncBtn">
+                     <graphic>
+                        <ImageView fx:id="syncImg" fitHeight="33.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+
+                           <image>
+                              <Image url="@../images/icons8-sync.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+
+                        <Insets top="5.0" />
+
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+
+                  </JFXButton>
+                  <Label fx:id="loginIndic">
+                     <graphic>
+                        <Circle fx:id="circleIndic" fill="#ff0101" radius="9.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets right="5.0" top="10.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons8_notification_26px_1.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets top="16.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="username" text="Username" textFill="#72b7fc">
+                     <padding>
+                        <Insets left="20.0" right="2.0" top="10.0" />
+                     </padding>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="7.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets top="8.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../images/icons8_male_user_32px.png" />
+                     </image>
+                  </ImageView>
+                  <MenuButton mnemonicParsing="false" text="More">
+                     <items>
+                        <MenuItem fx:id="syncMenu" mnemonicParsing="false" onAction="#handleSyncMenu" text="Sync" />
+                        <MenuItem fx:id="logOutMenu" mnemonicParsing="false" onAction="#handleLogOutMenu" text="Log out " />
+                     </items>
+                     <HBox.margin>
+                        <Insets left="25.0" top="10.0" />
+                     </HBox.margin>
+                  </MenuButton>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
