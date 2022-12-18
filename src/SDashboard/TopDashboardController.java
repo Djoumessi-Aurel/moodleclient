@@ -235,7 +235,9 @@ public class TopDashboardController implements Initializable {
             
             
             //delete the downloaded files
-            new CommandRunner(" rmdir /s /q files && mkdir files").start();
+            //new CommandRunner("rm ./files/*").start(); //Version Linux
+            System.out.println("Commande:__" + "del /s /q \".\\files\\*\"");
+            new CommandRunner("del /s /q \".\\files\\*\"").start();
             
             moodleclient.Moodleclient.clearLocalDatabase();
             
