@@ -85,9 +85,12 @@ public class PrivateFileHelper {
                 
                 String contextid = jfile.get("contextid").toString();
                 String fileName = jfile.get("filename").toString();
+                String encodedFileName = MyURLEncoder.encodeValue(fileName);
+                //System.out.println("### Nom du fichier privé: " + fileName);
+                //System.out.println("### Nom du encodé: " + encodedFileName);
                 
                 //build the url to download the file
-                String file_str_url = moodleclient.Moodleclient.serverAddress + "webservice/pluginfile.php/" + contextid + "/user/private/" + fileName + "?forcedownload=1&token=" + moodleclient.Moodleclient.user.getToken();
+                String file_str_url = moodleclient.Moodleclient.serverAddress + "webservice/pluginfile.php/" + contextid + "/user/private/" + encodedFileName + "?forcedownload=1&token=" + moodleclient.Moodleclient.user.getToken();
                 
                 
                 //downloading the file
