@@ -108,6 +108,7 @@ public class LogOutAlertBox {
         
         moodleclient.Moodleclient.courses = new ArrayList();
         moodleclient.Moodleclient.privateFiles = new ArrayList();
+        moodleclient.Moodleclient.assignments = new ArrayList();
         
         //display the login page
         moodleclient.Moodleclient.root.setLeft(null);

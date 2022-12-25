@@ -162,7 +162,6 @@ public class LoginController implements Initializable {
     private void handleServerBtn(ActionEvent event) throws Exception {
         
         String serverAddress = ServerSettingsAB.display();
-        System.out.println("Adresse du serveur=" + serverAddress);
         
         if(serverAddress.isEmpty()){} //The user choose cancel so we do nothing
         

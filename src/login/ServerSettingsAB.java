@@ -22,7 +22,7 @@ import javafx.scene.text.Font;
  */
 public class ServerSettingsAB {
     
-    private static String serverAddress = moodleclient.Moodleclient.serverAddress;
+    private static String serverAddress;
     
     
     public static String display(){
@@ -49,8 +49,8 @@ public class ServerSettingsAB {
         hb2.setAlignment(Pos.CENTER);
         
         
-        Label label = new Label("Server address: ");
-        JFXTextField textAddress = new JFXTextField(serverAddress);
+        Label label = new Label("Server address: ");        
+        JFXTextField textAddress = new JFXTextField(moodleclient.Moodleclient.serverAddress);
                 
         JFXButton saveBtn = new JFXButton("Save");
         saveBtn.setStyle("-fx-background-color:#CDCDCD");
