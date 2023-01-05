@@ -225,6 +225,7 @@ public class CoursesHelper {
                     }
                     
                     // il n'y a pas l'attribut "contents" pour les assignements
+
                     JSONArray contentsArr = (JSONArray) parse.parse(jmodule.get("contents").toString());
                     
                     for(int l = 0; l < contentsArr.size(); l++){
@@ -269,6 +270,7 @@ public class CoursesHelper {
                 JSONObject tmpCourse = (JSONObject) obj;
                 
                 if(tmpCourse.get("id").toString().equalsIgnoreCase(jobj.get("id").toString())){
+
                     //ici
                     assignments = (JSONArray) parser.parse(tmpCourse.get("assignments").toString());
                     

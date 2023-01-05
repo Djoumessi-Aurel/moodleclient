@@ -133,7 +133,7 @@ public class TopDashboardController implements Initializable {
         
         if(this.isSyncing){
            
-            //upload modifications of the private files
+            //upload modifications of the private files //UPLOADER LES FICHIERS PRIVES
             Moodleclient.session.beginTransaction();
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
@@ -144,12 +144,23 @@ public class TopDashboardController implements Initializable {
                 
                 PrivateFile privateFile = (PrivateFile) obj;
                 
+                //voyons le contenu de cet objet
+                /*petit test*/System.out.println("Contenu de l'objet obj : "+privateFile.getHashName());
+                
                 //build the url to update the file in the user's draft
-                //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                //String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
+                
+                //build the url to update the file in the user's draft
+                //Version Lening: //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
                 String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-
+                
+                /*petit test*/System.out.println(request);
+                
                 String requestResponse = new RequestCommand(request).runCommand();
-
+                
+                // Affichons un peu le resultat de cette commande
+                /*petit test*/System.out.println(requestResponse);
+                
                 //build the request to move the file to the private area of the user
                 JSONParser parser = new JSONParser();
                 
@@ -161,10 +172,11 @@ public class TopDashboardController implements Initializable {
                 //build the request
                 String draftId = jobj.get("itemid").toString();
                 
-                String request2 = "curl " + moodleclient.Moodleclient.serverAddress + "webservice/rest/server.php?moodlewsrestformat=json --data 'draftid=" + draftId + "&wsfunction=core_user_add_user_private_files&wstoken=" + moodleclient.Moodleclient.user.getToken() + "'";
-                
-                CommandRunner command2 = new CommandRunner(request2);
-                command2.start();
+                String request2 = "curl " + moodleclient.Moodleclient.serverAddress + "webservice/rest/server.php?moodlewsrestformat=json --data \"draftid=" + draftId + "&wsfunction=core_user_add_user_private_files&wstoken=" + moodleclient.Moodleclient.user.getToken() + "\"";
+                System.out.println("###Requête 2###\n" + request2);
+                //CommandRunner command2 = new CommandRunner(request2); //Ancien code
+                //command2.start();
+                new RequestCommand(request2).runCommand(); //Nouveau code
                 
                 //set the current private file as uploaded
                 byte b = 1;
@@ -176,7 +188,9 @@ public class TopDashboardController implements Initializable {
             
             Moodleclient.session.getTransaction().commit();
             
-            //upload the assignment submissions
+            // FIN DE L'UPLOAD DES FICHIERS PRIVES
+            
+            //upload the assignment submissions //UPLOADER LES SOUMISSIONS DE DEVOIRS
             Moodleclient.session.beginTransaction();
             
             List submissions = Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.synced=0").list();
@@ -201,7 +215,7 @@ public class TopDashboardController implements Initializable {
                 //build the request
                 String draftId = jobj.get("itemid").toString();
                 
-                String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data 'wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "'" ;
+                String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data \"wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "\"" ;
                 System.out.println(request2);
                 
                 String requestResponse2 = new RequestCommand(request2).runCommand();
@@ -218,13 +232,17 @@ public class TopDashboardController implements Initializable {
             
             Moodleclient.session.getTransaction().commit();
             
+            // FIN DE L'UPLOAD DES SOUMISSIONS DE DEVOIRS
+            
             Moodleclient.session.close();
             
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
             
             
             //delete the downloaded files
-            new CommandRunner(" del /q .\\files\\*").start();
+            //new CommandRunner("rm ./files/*").start(); //Version Linux
+            System.out.println("Commande:__" + "del /s /q \".\\files\\*\"");
+            new CommandRunner("del /s /q \".\\files\\*\"").start();
             
             moodleclient.Moodleclient.clearLocalDatabase();
             
@@ -345,6 +363,9 @@ public class TopDashboardController implements Initializable {
             Tooltip toolTextSync = new Tooltip(startSyncText);
             this.syncBtn.setTooltip(toolTextSync);
         }
+        
+        
+        //Moodleclient.session.getTransaction().commit(); //Ajouté par DJOUMESSI
         
         Moodleclient.session.beginTransaction();
         

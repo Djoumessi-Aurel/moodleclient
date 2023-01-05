@@ -49,6 +49,7 @@ public class SubmitAssignmentController implements Initializable{
     private TextArea list;
 
     final FileChooser fc = new FileChooser();
+
     @FXML
     private Label devoirId;
     @FXML
@@ -106,6 +107,7 @@ public class SubmitAssignmentController implements Initializable{
             
             //CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'");
             CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \"./files/" + hashName + "\"");
+
             commandRunner.start();
             
             //save the file in the database
