@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SAssignment.StudentAssignmentController">
+   <children>
+      <Pane prefHeight="41.0" prefWidth="523.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0">
+         <children>
+            <Label fx:id="topicName" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="513.0" style="-fx-background-color: FFFFFF;" text="Topic 2" textFill="#0a82c3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="devoirId" contentDisplay="CENTER" layoutX="501.0" layoutY="3.0" prefHeight="36.0" prefWidth="87.0" style="-fx-background-color: FFFFFF;" textFill="#0a82c3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </Pane>
+      <VBox prefHeight="350.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <AnchorPane prefHeight="340.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox layoutY="52.0" prefHeight="348.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
+                     <children>
+                        <Label text="Submission status" textFill="#101111">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="4.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane fx:id="gridpane" maxWidth="1.7976931348623157E308">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="0.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="0.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <AnchorPane style="-fx-background-color: #F5F5F5;">
+                                 <children>
+                                    <Label text="Submission status: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label fx:id="status" text="No attempt">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane GridPane.rowIndex="1">
+                                 <children>
+                                    <Label prefHeight="30.0" prefWidth="225.0" style="-fx-background-color: #FBFBF9;" text="Due date: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label fx:id="dueDate" text="Sunday, 28 November 2021, 12:00 AM">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </GridPane>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <JFXButton fx:id="btnAddSub" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#handleAddSubmission" prefHeight="37.0" prefWidth="162.0" style="-fx-background-color: #DCDCDC;" text="Add submission" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="25.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

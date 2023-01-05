@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxWidth="1.7976931348623157E308" prefHeight="84.0" prefWidth="1000.0" style="-fx-border-color: transparent transparent  D1D0CE transparent; -fx-border-style: solid; -fx-cursor: hand;" styleClass="my-btn-class" stylesheets="@../SCourseCard/courseCard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SAssignmentCard.AvailableAssignmentCardController">
+   <children>
+      <Label fx:id="courseAssignmentName" layoutX="14.0" layoutY="27.0" text="Course Assignment 1" textFill="#27a0d0">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_task_24px_1.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <Label fx:id="assignmentDesc" layoutX="37.0" layoutY="52.0" text="Teacher: Prof 1" />
+   </children>
+</Pane>

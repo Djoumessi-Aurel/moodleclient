@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="99.0" prefWidth="519.0" style="-fx-border-color: transparent transparent  D1D0CE transparent; -fx-border-style: sol;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="STopicCard.TopicCardController">
+   <children>
+      <Label fx:id="topicName" layoutX="24.0" layoutY="14.0" text="Topic 1" textFill="#27a0d0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="doc" layoutX="51.0" layoutY="54.0" text="Documents" />
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="24.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/icons8_folder_24px.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

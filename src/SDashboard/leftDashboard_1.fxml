@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="193.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.LeftDashboardController">
+   <children>
+      <ScrollPane layoutY="-6.0" maxHeight="1.7976931348623157E308" prefHeight="400.0" prefWidth="193.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <VBox prefHeight="388.0" prefWidth="193.0" style="-fx-background-color: #DCDCDC;">
+               <children>
+                  <JFXButton fx:id="btnDashboard" onAction="#handleButtonDashboard" prefHeight="46.0" prefWidth="212.0" style="-fx-border-color: D1D0CE; -fx-background-color: #357EC7;" styleClass="over" text="Dashboard" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_speed_24px_2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnSiteHome" layoutX="10.0" layoutY="10.0" onAction="#handleButtonSHome" prefHeight="46.0" prefWidth="205.0" style="-fx-border-color: D1D0CE;" styleClass="over" stylesheets="@../moodleclient/application.css" text="Site home">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_home_24px_2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnPrivateFiles" layoutX="10.0" layoutY="56.0" onAction="#handleButtonSPrivaFiles" prefHeight="46.0" prefWidth="214.0" style="-fx-border-color: D1D0CE;" styleClass="over" stylesheets="@../moodleclient/application.css" text="Private Files">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_file_16px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnAssignments" onAction="#handleButtonSAssignment" prefHeight="46.0" prefWidth="290.0" style="-fx-border-color: D1D0CE;" styleClass="over" stylesheets="@../moodleclient/application.css" text="Assignments">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_task_24px_1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnCourses" layoutX="10.0" layoutY="102.0" onAction="#handleButtonSHome" prefHeight="46.0" prefWidth="230.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" stylesheets="@../moodleclient/application.css" text="My Courses">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_graduation_cap_26px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Label alignment="CENTER" prefHeight="49.0" prefWidth="207.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Course 1" textAlignment="CENTER" textFill="#788080">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons8_graduation_cap_26px.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

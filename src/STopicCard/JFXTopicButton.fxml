@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+
+<JFXButton fx:id="topicName" prefHeight="46.0" prefWidth="163.0" style="-fx-border-color: D1D0CE;" styleClass="over" stylesheets="@../application/application.css" text="Topic 1" textFill="#141414" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="STopicCard.TopicBtnController">
+   <font>
+      <Font size="14.0" />
+   </font>
+   <graphic>
+      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/icons8_folder_24px.png" />
+         </image>
+      </ImageView>
+   </graphic>
+</JFXButton>

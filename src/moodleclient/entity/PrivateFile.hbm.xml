@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 juin 2022 05:48:45 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="moodleclient.entity.PrivateFile" table="private_file" catalog="moodleclientdb" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="fileName" type="string">
+            <column name="file_name" not-null="true" />
+        </property>
+        <property name="hashName" type="string">
+            <column name="hash_name" unique="true" />
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="createdAt" length="19" />
+        </property>
+        <property name="updatedAt" type="timestamp">
+            <column name="updatedAt" length="19" />
+        </property>
+        <property name="synced" type="java.lang.Byte">
+            <column name="synced" />
+        </property>
+    </class>
+</hibernate-mapping>

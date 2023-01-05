@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 juin 2022 05:48:45 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="moodleclient.entity.Sections" table="sections" catalog="moodleclientdb" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="cours" class="moodleclient.entity.Cours" fetch="select">
+            <column name="courId" />
+        </many-to-one>
+        <property name="nom" type="string">
+            <column name="nom" />
+        </property>
+        <property name="createdAt" type="timestamp">
+            <column name="createdAt" length="19" />
+        </property>
+        <property name="updatedAt" type="timestamp">
+            <column name="updatedAt" length="19" />
+        </property>
+        <property name="remoteId" type="java.lang.Integer">
+            <column name="remote_id" />
+        </property>
+        <set name="courseFiles" table="course_file" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="sectionId" />
+            </key>
+            <one-to-many class="moodleclient.entity.CourseFile" />
+        </set>
+    </class>
+</hibernate-mapping>

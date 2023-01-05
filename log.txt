@@ -1,0 +1,2 @@
+curl -X POST -F "file_1=@./files/1655301650301_WhatsApp Image 2022-06-10 at 11.53.27 (1).jpeg" http://192.168.8.100/moodle/webservice/upload.php?token=05493d8db4c6f4e3c88869eb500821d9
+privateFile
