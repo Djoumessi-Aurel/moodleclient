@@ -113,10 +113,8 @@ public class StudentAssignmentListController implements Initializable{
                                     fileButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                         @Override
                                         public void handle(MouseEvent event) {
-<<<<<<< HEAD
+
                                             // lorsqu'on clique sur un devoir (when we clic on an assignemnt)
-=======
->>>>>>> aurel
                                             FileLauncher fileLauncher = new FileLauncher(courseFile.getHashName());
                                             fileLauncher.start();
                                         }
