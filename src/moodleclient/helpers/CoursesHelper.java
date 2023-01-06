@@ -216,7 +216,16 @@ public class CoursesHelper {
                 for(int k = 0; k < modulesArr.size(); k++){
                     
                     JSONObject jmodule = (JSONObject) modulesArr.get(k);
+                                        
+                    // Ajoutons une petite condition
+                    // On verifie s'il s'agit d'un assignment
+                    if(jmodule.get("modname").equals("assign")){
+                        // ceci est un assignment, on saute cette iteration de la boucle
+                        continue;
+                    }
                     
+                    // il n'y a pas l'attribut "contents" pour les assignements
+
                     JSONArray contentsArr = (JSONArray) parse.parse(jmodule.get("contents").toString());
                     
                     for(int l = 0; l < contentsArr.size(); l++){
@@ -261,7 +270,8 @@ public class CoursesHelper {
                 JSONObject tmpCourse = (JSONObject) obj;
                 
                 if(tmpCourse.get("id").toString().equalsIgnoreCase(jobj.get("id").toString())){
-                    
+
+                    //ici
                     assignments = (JSONArray) parser.parse(tmpCourse.get("assignments").toString());
                     
                     break;
@@ -290,6 +300,8 @@ public class CoursesHelper {
     public void saveAssignments(JSONArray ass_jarr, Cours cours) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
                     
         for(int m = 0; m < ass_jarr.size(); m++){
+            
+            System.out.println("Valeur ass_jarr :" + ass_jarr);
 
             JSONObject str = (JSONObject) ass_jarr.get(m);
 

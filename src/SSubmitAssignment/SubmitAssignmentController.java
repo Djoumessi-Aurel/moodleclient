@@ -32,25 +32,24 @@ import moodleclient.util.HibernateUtil;
 public class SubmitAssignmentController implements Initializable{
 	
 
-	    @FXML
-	    private Label courseName;
+    @FXML
+    private Label courseName;
 
-	    @FXML
-	    private JFXButton fileChooser;
+    @FXML
+    private JFXButton fileChooser;
 
-	    @FXML
-	    private JFXButton btnSave;
+    @FXML
+    private JFXButton btnSave;
 
-	    @FXML
-	    private JFXButton btnCancel;
+    @FXML
+    private JFXButton btnCancel;
 
-	    
-	    
-	   
-            @FXML
-            private TextArea list;
-	    
-            final FileChooser fc = new FileChooser();
+
+    @FXML
+    private TextArea list;
+
+    final FileChooser fc = new FileChooser();
+
     @FXML
     private Label devoirId;
     @FXML
@@ -106,7 +105,9 @@ public class SubmitAssignmentController implements Initializable{
             
             String hashName = file.getName();
             
-            CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'");
+            //CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'");
+            CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \"./files/" + hashName + "\"");
+
             commandRunner.start();
             
             //save the file in the database
@@ -184,8 +185,10 @@ public class SubmitAssignmentController implements Initializable{
                     @Override
                     public void handle(MouseEvent event) {
                         //delete the current private file from the local storage
-                        CommandRunner deleteCommand = new CommandRunner("rm ./files/'" + asub.getHashName() + "'");
-
+                        //CommandRunner deleteCommand = new CommandRunner("rm ./files/'" + asub.getHashName() + "'");
+                        CommandRunner deleteCommand = new CommandRunner("del \".\\files\\" + asub.getHashName() + "\"");
+                        deleteCommand.start();
+                        
                         //delete the instance from the database
                         Moodleclient.session.beginTransaction();
 

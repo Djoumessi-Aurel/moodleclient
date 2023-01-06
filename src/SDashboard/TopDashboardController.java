@@ -176,7 +176,7 @@ public class TopDashboardController implements Initializable {
                 System.out.println("###Requête 2###\n" + request2);
                 //CommandRunner command2 = new CommandRunner(request2); //Ancien code
                 //command2.start();
-                new RequestCommand(request2).runCommand(); //Nouveau
+                new RequestCommand(request2).runCommand(); //Nouveau code
                 
                 //set the current private file as uploaded
                 byte b = 1;
