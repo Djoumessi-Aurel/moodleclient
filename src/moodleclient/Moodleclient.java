@@ -46,6 +46,7 @@ public class Moodleclient extends Application {
     public static Users user;
     public static String sessionId = "";
     public static String serverAddress;
+    public static String PRIVILEGED_TOKEN = "6caabc2517be4bc73b9ceb05ae2c031b"; //Permet d'effectuer des opérations telle que: récupérer les soumissions de devoirs
     
     public static boolean autoSync;
     
