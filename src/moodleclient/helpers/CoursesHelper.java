@@ -304,7 +304,7 @@ public class CoursesHelper {
                     
         for(int m = 0; m < ass_jarr.size(); m++){
             
-            System.out.println("Valeur ass_jarr :" + ass_jarr);
+            //System.out.println("Valeur ass_jarr :" + ass_jarr);
 
             JSONObject str = (JSONObject) ass_jarr.get(m);
 
@@ -438,8 +438,15 @@ public class CoursesHelper {
             JSONParser parse = new JSONParser();
             JSONObject jobj = (JSONObject) parse.parse(res);
             
-            jarr = (JSONArray) parse.parse(jobj.get("assignments").toString());
-            System.out.println("RESULTAT DE LA FONCTION UnTest");
+            try{
+                jarr = (JSONArray) parse.parse(jobj.get("assignments").toString());
+            }
+            catch(NullPointerException e){ //L'objet n'a pas d'attribut assignments
+                System.out.println("***Vous n'avez pas le droit d'accéder à ces données.***\nRésultat de la requête: "+jobj);
+                Moodleclient.session.getTransaction().commit();
+                return;
+            }
+            
             
             for(int i=0; i<jarr.size(); i++){
                 JSONObject obj1 = (JSONObject) jarr.get(i);
