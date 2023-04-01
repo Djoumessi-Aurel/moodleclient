@@ -18,6 +18,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import static moodleclient.Moodleclient.root;
 import moodleclient.exceptions.NotValidSessionException;
@@ -42,6 +45,7 @@ public class LeftDashboardController implements Initializable {
     private JFXButton btnAssignments;
     @FXML
     private JFXButton btnCourses;
+    
 
     /**
      * Initializes the controller class.
@@ -57,13 +61,16 @@ public class LeftDashboardController implements Initializable {
         AnchorPane content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
         
         root.setCenter(content);
+        
+        selectButton(btnDashboard);
+        deselectButton(btnPrivateFiles); deselectButton(btnAssignments);
     }
 
     @FXML
     private void handleButtonSHome(ActionEvent event) throws IOException {
         AnchorPane content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SHome/StudentHome.fxml"));
-        root.setCenter(content);
         
+        root.setCenter(content);
     }
 
     @FXML
@@ -72,7 +79,9 @@ public class LeftDashboardController implements Initializable {
         AnchorPane content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SSavePrivateFiles/StudentSavePrivateFiles_1.fxml"));
 
         root.setCenter(content);
-        
+
+        selectButton(btnPrivateFiles);
+        deselectButton(btnDashboard); deselectButton(btnAssignments);
     }
 
     @FXML
@@ -82,6 +91,20 @@ public class LeftDashboardController implements Initializable {
 
         root.setCenter(content);
         
+        selectButton(btnAssignments);
+        deselectButton(btnDashboard); deselectButton(btnPrivateFiles);
+    }
+    
+    private void selectButton(JFXButton bouton){
+        bouton.setStyle("-fx-border-color: D1D0CE; -fx-background-color: #357EC7");
+        bouton.setTextFill(Color.WHITE);
+        bouton.setFont(Font.font("System", FontWeight.BOLD, 14));
+    }
+    
+    private void deselectButton(JFXButton bouton){
+        bouton.setStyle("-fx-border-color: D1D0CE; -fx-background-color: #F4F4F4");
+        bouton.setTextFill(Color.BLACK);
+        bouton.setFont(Font.font("System", FontWeight.NORMAL, 14));
     }
     
 }

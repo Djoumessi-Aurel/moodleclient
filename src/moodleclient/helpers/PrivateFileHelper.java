@@ -85,6 +85,7 @@ public class PrivateFileHelper {
                 
                 String contextid = jfile.get("contextid").toString();
                 String fileName = jfile.get("filename").toString();
+
                 String encodedFileName = MyURLEncoder.encodeValue(fileName);
                 //System.out.println("### Nom du fichier privé: " + fileName);
                 //System.out.println("### Nom du encodé: " + encodedFileName);

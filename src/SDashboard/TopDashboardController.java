@@ -176,7 +176,7 @@ public class TopDashboardController implements Initializable {
                 System.out.println("###Requête 2###\n" + request2);
                 //CommandRunner command2 = new CommandRunner(request2); //Ancien code
                 //command2.start();
-                new RequestCommand(request2).runCommand(); //Nouveau
+                new RequestCommand(request2).runCommand(); //Nouveau code
                 
                 //set the current private file as uploaded
                 byte b = 1;
@@ -244,15 +244,18 @@ public class TopDashboardController implements Initializable {
             System.out.println("Commande:__" + "del /s /q \".\\files\\*\"");
             new CommandRunner("del /s /q \".\\files\\*\"").start();
             
+            //Clear the database
             moodleclient.Moodleclient.clearLocalDatabase();
             
             this.syncingText.setVisible(true);
             
             this.rt.play();
             
+            //Pull courses, assignments and assignments submissions
             this.courseLoader = new CoursesLoader();
             this.courseLoader.start();
             
+            //Pull private files
             this.privateFileLoader = new PrivateFilesLoader();
             this.privateFileLoader.start();
             
