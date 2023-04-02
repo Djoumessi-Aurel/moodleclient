@@ -26,6 +26,7 @@ import static moodleclient.Moodleclient.root;
 import moodleclient.exceptions.ServerUnreachableException;
 import moodleclient.exceptions.WrongCredentialsException;
 import moodleclient.helpers.AccountHelper;
+import moodleclient.helpers.CurrentTab;
 
 import org.hibernate.Session;
 import org.json.simple.JSONObject;
@@ -118,8 +119,11 @@ public class LoginController implements Initializable {
                        
                        //accountHelper.getSessionId();
 
-                       Dry dry = new Dry();
-                       dry.showDashboard(root);
+                       usernameInput.setText("");
+                       passwordInput.setText("");
+                       Moodleclient.CURRENT_TAB = CurrentTab.DASHBOARD;
+                       
+                       new Dry().showDashboard(root);
 
                        System.out.println("account created");
 

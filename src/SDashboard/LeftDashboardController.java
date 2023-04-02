@@ -22,9 +22,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import moodleclient.Moodleclient;
 import static moodleclient.Moodleclient.root;
 import moodleclient.exceptions.NotValidSessionException;
 import moodleclient.exceptions.ServerUnreachableException;
+import moodleclient.helpers.CurrentTab;
 import moodleclient.helpers.PrivateFileHelper;
 import org.json.simple.parser.ParseException;
 
@@ -45,14 +47,39 @@ public class LeftDashboardController implements Initializable {
     private JFXButton btnAssignments;
     @FXML
     private JFXButton btnCourses;
-    
+        
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // On désélectionne tout
+       deselectButton(btnAssignments); deselectButton(btnDashboard); deselectButton(btnPrivateFiles);
+        System.out.println("LEFTDASHBOARD: INITIALISATION");
+        try{
+            AnchorPane content = null;
+            // On sélectionne l'onglet courant
+                switch(Moodleclient.CURRENT_TAB){
+                        case DASHBOARD:
+                            selectButton(btnDashboard);
+                            content =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
+                            break;
+                        case PRIVATE_FILES:
+                            selectButton(btnPrivateFiles);
+                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SSavePrivateFiles/StudentSavePrivateFiles_1.fxml"));
+                            break;
+                        case ASSIGNMENTS:
+                            selectButton(btnAssignments);
+                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml"));
+                            break;
+                    }
+
+                if(content != null) root.setCenter(content);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+        
     }    
 
     @FXML
@@ -62,6 +89,7 @@ public class LeftDashboardController implements Initializable {
         
         root.setCenter(content);
         
+        Moodleclient.CURRENT_TAB = CurrentTab.DASHBOARD;
         selectButton(btnDashboard);
         deselectButton(btnPrivateFiles); deselectButton(btnAssignments);
     }
@@ -80,6 +108,7 @@ public class LeftDashboardController implements Initializable {
 
         root.setCenter(content);
 
+        Moodleclient.CURRENT_TAB = CurrentTab.PRIVATE_FILES;
         selectButton(btnPrivateFiles);
         deselectButton(btnDashboard); deselectButton(btnAssignments);
     }
@@ -91,6 +120,7 @@ public class LeftDashboardController implements Initializable {
 
         root.setCenter(content);
         
+        Moodleclient.CURRENT_TAB = CurrentTab.ASSIGNMENTS;
         selectButton(btnAssignments);
         deselectButton(btnDashboard); deselectButton(btnPrivateFiles);
     }
@@ -106,5 +136,20 @@ public class LeftDashboardController implements Initializable {
         bouton.setTextFill(Color.BLACK);
         bouton.setFont(Font.font("System", FontWeight.NORMAL, 14));
     }
+    
+    
+    //Functions to refresh pages
+    
+   /* public static void refreshDashboard(){
+        handleButtonDashboard(new ActionEvent());
+    }
+    
+    public static void refreshPrivateFiles(){
+        btnPrivateFiles.fire();
+    }
+    
+    public static void refreshAssignments(){
+        btnAssignments.fire();
+    }*/
     
 }

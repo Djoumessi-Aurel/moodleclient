@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,8 +41,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import login.Dry;
 import moodleclient.LogOutAlertBox;
 import moodleclient.Moodleclient;
+import static moodleclient.Moodleclient.root;
 import moodleclient.SyncAlertBox;
 import moodleclient.exceptions.ServerUnreachableException;
 import moodleclient.helpers.CoursesHelper;
@@ -79,6 +82,9 @@ public class TopDashboardController implements Initializable {
     
     private CoursesLoader courseLoader;
     private PrivateFilesLoader privateFileLoader;
+    
+    //Le nombre de Threads qu'on lance lors de la synchronisation. Il y en a deux actuellement: CoursesLoader et PrivateFilesLoader
+    private int numberOfSyncThreads = 2;
     
     @FXML
     private JFXButton syncBtn;
@@ -239,37 +245,57 @@ public class TopDashboardController implements Initializable {
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
             
             
-            //delete the downloaded files
+            //DELETE THE DOWNLOADED FILES
             //new CommandRunner("rm ./files/*").start(); //Version Linux
             System.out.println("Commande:__" + "del /s /q \".\\files\\*\"");
             new CommandRunner("del /s /q \".\\files\\*\"").start();
             
-            //Clear the database
+            //CLEAR THE DATABASE
             moodleclient.Moodleclient.clearLocalDatabase();
             
             this.syncingText.setVisible(true);
             
             this.rt.play();
             
-            //Pull courses, assignments and assignments submissions
+            //PULL COURSES, ASSIGNMENTS AND ASSIGNMENTS SUBMISSIONS
             this.courseLoader = new CoursesLoader();
             this.courseLoader.start();
             
-            //Pull private files
+            //PULL PRIVATE FILES
             this.privateFileLoader = new PrivateFilesLoader();
             this.privateFileLoader.start();
             
             Tooltip toolTextSync = new Tooltip(stopSyncText);
             syncBtn.setTooltip(toolTextSync);
             
-        } else {
+            //AnchorPane leftMenu =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/leftDashboard.fxml"));
+            //Moodleclient.root.setLeft(leftMenu);
+            /*try{
+            AnchorPane content = null;
+            root.setCenter(new AnchorPane());
+            // On sélectionne l'onglet courant
+                switch(Moodleclient.CURRENT_TAB){
+                        case DASHBOARD:
+                            //selectButton(btnDashboard);
+                            content =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
+                            break;
+                        case PRIVATE_FILES:
+                           // selectButton(btnPrivateFiles);
+                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SSavePrivateFiles/StudentSavePrivateFiles_1.fxml"));
+                            break;
+                        case ASSIGNMENTS:
+                           // selectButton(btnAssignments);
+                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml"));
+                            break;
+                    }
+
+                root.setCenter(content);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }*/
             
-            this.syncingText.setVisible(false);
-            
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            syncBtn.setTooltip(toolTextSync); 
-            
-            this.rt.stop();
+        } else {            
+            this.stopSyncAnimation();
         }
     }
     
@@ -336,45 +362,28 @@ public class TopDashboardController implements Initializable {
     //function to update the application list of courses
     public void updateCoursesList() throws IOException{
         
-        this.syncDone++;
-        
-        if(syncDone == 2){
-            this.syncingText.setVisible(false);
-            this.rt.stop();
-
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            this.syncBtn.setTooltip(toolTextSync);
-        }
-        
         Moodleclient.session.beginTransaction();
         
         Moodleclient.courses =  Moodleclient.session.createQuery("from Cours").list();
         
         Moodleclient.session.getTransaction().commit();
         
+        
+       this.checkIfSyncEnded();
+        
     }
     
     //function to update the application list of private files
     public void updatePrivateFilesList() throws IOException{
-        
-        this.syncDone++;
-        
-        if(syncDone == 2){
-            this.syncingText.setVisible(false);
-            this.rt.stop();
-
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            this.syncBtn.setTooltip(toolTextSync);
-        }
-        
-        
-        //Moodleclient.session.getTransaction().commit(); //Ajouté par DJOUMESSI
-        
+                        
         Moodleclient.session.beginTransaction();
         
         Moodleclient.privateFiles =  Moodleclient.session.createQuery("from PrivateFile").list();
         
         Moodleclient.session.getTransaction().commit();
+        
+        
+        this.checkIfSyncEnded();
     }
     
     //function to pull and display courses
@@ -399,6 +408,7 @@ public class TopDashboardController implements Initializable {
                 coursesHlpr.saveCourses(courses, assignments);
                 
                 updateCoursesList();
+                System.out.println("THREAD COURSES AND ASSIGNMENTS TERMINE");
                 
             } catch (IOException ex) {
                 
@@ -434,6 +444,7 @@ public class TopDashboardController implements Initializable {
                 privateFileHelper.pullPrivateFiles();
                 
                 updatePrivateFilesList();
+                System.out.println("THREAD PRIVATEFILES TERMINE");
                 
             } catch (ParseException ex) {
                 
@@ -452,6 +463,39 @@ public class TopDashboardController implements Initializable {
                 ex.printStackTrace();
             }
         }
+    }
+    
+    
+    //Vérifie si la synchronisation est terminée, et effectue certaines actions si oui
+    public void checkIfSyncEnded(){
+        this.syncDone++;
+        
+        if(syncDone == this.numberOfSyncThreads){//On a fini avec tous les Threads lancés, donc la SYNCHRONISATION TERMINEE, ON RAFRAÎCHIT LA PAGE
+            
+            this.stopSyncAnimation();
+            
+            // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+            Platform.runLater(
+              () -> {
+                try {
+                    System.out.println("SYNCHRO TERMINEE");
+                    new Dry().showDashboard(root);
+                } catch (IOException ex) {
+                    Logger.getLogger(TopDashboardController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+              }
+            );
+            
+        }
+    }
+    
+    public void stopSyncAnimation(){
+            this.syncingText.setVisible(false);
+            
+            Tooltip toolTextSync = new Tooltip(startSyncText);
+            this.syncBtn.setTooltip(toolTextSync);
+            
+            this.rt.stop();
     }
     
 }

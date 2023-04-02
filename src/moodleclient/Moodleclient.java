@@ -28,6 +28,7 @@ import login.Dry;
 
 import moodleclient.entity.Users;
 import moodleclient.helpers.AccountHelper;
+import moodleclient.helpers.CurrentTab;
 import moodleclient.util.HibernateUtil;
 
 import org.hibernate.Session;
@@ -46,7 +47,8 @@ public class Moodleclient extends Application {
     public static Users user;
     public static String sessionId = "";
     public static String serverAddress;
-    public static String PRIVILEGED_TOKEN = "185f29d0a8e97d6f1e578c2e54fff361"; //Permet d'effectuer des opérations telle que: récupérer les soumissions de devoirs
+    public static String PRIVILEGED_TOKEN = "185f29d0a8e97d6f1e578c2e54fff361"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
+    public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
     
     public static boolean autoSync;
     
