@@ -56,7 +56,7 @@ public class LeftDashboardController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // On désélectionne tout
        deselectButton(btnAssignments); deselectButton(btnDashboard); deselectButton(btnPrivateFiles);
-        System.out.println("LEFTDASHBOARD: INITIALISATION");
+        
         try{
             AnchorPane content = null;
             // On sélectionne l'onglet courant
