@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SAssignment.StudentAssignmentController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SAssignment.StudentAssignmentController">
    <children>
       <Pane prefHeight="41.0" prefWidth="523.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0">
          <children>
@@ -56,6 +56,7 @@
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
                               <AnchorPane style="-fx-background-color: #F5F5F5;">
@@ -67,7 +68,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1">
+                              <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1">
                                  <children>
                                     <Label fx:id="status" text="No attempt">
                                        <font>
@@ -85,7 +86,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
                                     <Label fx:id="dueDate" text="Sunday, 28 November 2021, 12:00 AM">
                                        <font>
@@ -94,6 +95,16 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
+                              <Label text="Grade:" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="gradeLabel" text="Grade:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <VBox.margin>
                               <Insets left="20.0" top="10.0" />

@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -85,7 +87,17 @@ public class StudentAssignmentListController implements Initializable{
                                 status.setText(devoir.getEtat());
                                 
                                 Label dueDate  = (Label) assignmentLoader.getNamespace().get("dueDate");
-                                dueDate.setText(devoir.getDateLimite().toString());
+                                dueDate.setText(Moodleclient.dateFormat.format(devoir.getDateLimite()));
+                                
+                                //Mise en forme
+                                if(devoir.getEtat().equalsIgnoreCase("submitted")) status.setTextFill(Color.BLUE);
+                                else{
+                                    status.setTextFill(Color.MAROON);
+                                    
+                                    if(devoir.getDateLimite().compareTo(new Date()) <= 0){
+                                     dueDate.setTextFill(Color.MAROON);
+                                    }
+                                }
                                 
                                 GridPane gridpane = (GridPane) assignmentLoader.getNamespace().get("gridpane");
                                 
@@ -94,7 +106,7 @@ public class StudentAssignmentListController implements Initializable{
                                 //load and set the files of the assignment
                                 Set assignmentFiles = devoir.getRessourceDevoirs();
 
-                                int k = 2;
+                                int k = 3;
 
                                 for(Object file : assignmentFiles){
 
@@ -143,9 +155,22 @@ public class StudentAssignmentListController implements Initializable{
 
                     Label assignmentName = (Label) loader.getNamespace().get("courseAssignmentName");
                     Label assignMentDesc = (Label) loader.getNamespace().get("assignmentDesc");
+                    Label assignmentStatus = (Label) loader.getNamespace().get("assignmentStatus");
 
                     assignmentName.setText(devoir.getCours().getNom() + "/" + devoir.getEnonce());
-                    assignMentDesc.setText("due date: " + devoir.getDateLimite().toString());
+                    assignMentDesc.setText("due date: " + Moodleclient.dateFormat.format(devoir.getDateLimite()));
+                    assignmentStatus.setText(devoir.getEtat());
+                    
+                    //Mise en forme. Si le devoir n'est pas soumis et que la date limite est dépassée...
+                    if(devoir.getEtat().equalsIgnoreCase("submitted")){
+                        assignmentStatus.setTextFill(Color.BLUE);
+                    }
+                    else{
+                        assignmentStatus.setTextFill(Color.MAROON);
+                        if(devoir.getDateLimite().compareTo(new Date()) <= 0){
+                         assignMentDesc.setTextFill(Color.MAROON);
+                        }
+                    }
 
                     gridpane.add(content, 0, i, 1, 1);
                 }

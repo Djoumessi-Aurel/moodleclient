@@ -10,5 +10,8 @@ public class AvailableAssignmentCardController {
 
     @FXML
     private Label assignmentDesc;
+    
+    @FXML
+    private Label assignmentStatus;
 
 }

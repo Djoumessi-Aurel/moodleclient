@@ -37,6 +37,8 @@ public class StudentAssignmentController implements Initializable {
     @FXML
     private Label dueDate;
     @FXML
+    private Label gradeLabel;
+    @FXML
     private Label devoirId;
     
 

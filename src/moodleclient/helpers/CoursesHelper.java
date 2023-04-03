@@ -190,6 +190,8 @@ public class CoursesHelper {
         
         for(int i = 0; i < coursesjarr.size(); i++){
             
+            JSONObject assignmentCompletionData = new JSONObject(); //Permettra de savoir si tel devoir a été remis ou pas. clé = remoteId du devoir. valeur = 1 (remis) ou 0 (non remis)
+            
             Moodleclient.session.beginTransaction();
         
             //save the course
@@ -203,7 +205,7 @@ public class CoursesHelper {
             JSONArray courseData = this.pullCourse(jobj.get("id").toString());
             
             //save the sections of the course
-            for(int j = 1; j < courseData.size(); j++){
+            for(int j = 0; j < courseData.size(); j++){
                 
                 JSONObject jsection = (JSONObject) courseData.get(j);
                 
@@ -219,15 +221,19 @@ public class CoursesHelper {
                 for(int k = 0; k < modulesArr.size(); k++){
                     
                     JSONObject jmodule = (JSONObject) modulesArr.get(k);
-                    // Ajoutons une petite condition
+                    
                     // On verifie s'il s'agit d'un assignment
                     if(jmodule.get("modname").equals("assign")){
-                        // ceci est un assignment, on saute cette iteration de la boucle
-                        continue;
+                        Object remoteId = jmodule.get("instance"); //Le remoteId du devoir
+                        Object completionState = ((JSONObject) jmodule.get("completiondata")).get("state"); //état: 1 (remis) ou 0 (non remis)
+                        
+                        assignmentCompletionData.put(remoteId, completionState);
                     }
                     
-                    // il n'y a pas l'attribut "contents" pour les assignements
-
+                    // il n'y a pas l'attribut "contents" pour les assignements et d'autres modules. Dans ce cas, on passe à l'itération suivante.
+                    if(jmodule.get("contents")==null) continue;
+                    
+                    
                     JSONArray contentsArr = (JSONArray) parse.parse(jmodule.get("contents").toString());
                     
                     for(int l = 0; l < contentsArr.size(); l++){
@@ -287,7 +293,7 @@ public class CoursesHelper {
             
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
             
-            saveAssignments(assignments, cours);
+            saveAssignments(assignments, cours, assignmentCompletionData);
         
         }
         
@@ -300,8 +306,8 @@ public class CoursesHelper {
     }
     
     //function to save the assignements of a course
-    public void saveAssignments(JSONArray ass_jarr, Cours cours) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
-                    
+    public void saveAssignments(JSONArray ass_jarr, Cours cours, JSONObject ass_completion_data) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
+
         for(int m = 0; m < ass_jarr.size(); m++){
             
             //System.out.println("Valeur ass_jarr :" + ass_jarr);
@@ -309,13 +315,20 @@ public class CoursesHelper {
             JSONObject str = (JSONObject) ass_jarr.get(m);
 
             String name = str.get("name").toString();
-            String etat = "";
+            String remoteId = str.get("id").toString();
             
-            if(str.get("nosubmissions").toString().equalsIgnoreCase("0")){
+            String etat = "due";
+            try{
+                etat = ass_completion_data.get(str.get("id")).toString().equalsIgnoreCase("0") ? "due" : "submitted";
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+            
+            /*if(str.get("nosubmissions").toString().equalsIgnoreCase("0")){ //Ceci ne marche pas. c'est toujours égal à 0, que le devoir ait été remis ou non
                 etat = "submitted";
             }else{
                 etat = "due";
-            }
+            }*/
 
             if(str.containsKey("introattachments")){
 
@@ -323,7 +336,7 @@ public class CoursesHelper {
                 
                 Timestamp ts = new Timestamp((long)str.get("duedate")*1000); 
                 Date due_date = new Date(ts.getTime());
-                Devoirs devoirs = new Devoirs(cours, name, due_date, etat, str.get("id").toString(), new Date(), new Date(), new HashSet(), new HashSet());
+                Devoirs devoirs = new Devoirs(cours, name, due_date, etat, remoteId, new Date(), new Date(), new HashSet(), new HashSet());
                 Moodleclient.session.beginTransaction();
                 Moodleclient.session.save(devoirs);
                 Moodleclient.session.getTransaction().commit();

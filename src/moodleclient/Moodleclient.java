@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -49,6 +50,8 @@ public class Moodleclient extends Application {
     public static String serverAddress;
     public static String PRIVILEGED_TOKEN = "185f29d0a8e97d6f1e578c2e54fff361"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
     public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
+    
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
     
     public static boolean autoSync;
     
@@ -111,6 +114,7 @@ public class Moodleclient extends Application {
         
         stage.setScene(scene);
         stage.setMinWidth(1000);
+        stage.setHeight(600);
         stage.show();
     }
 
