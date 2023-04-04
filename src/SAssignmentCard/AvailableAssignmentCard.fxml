@@ -13,7 +13,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="846.0">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="92.0" prefWidth="362.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="349.0">
                <children>
                   <Label fx:id="courseAssignmentName" text="Course Assignment 1" textFill="#27a0d0">
                      <font>

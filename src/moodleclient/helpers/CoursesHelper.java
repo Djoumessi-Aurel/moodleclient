@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,7 @@ public class CoursesHelper {
     private static String GET_COURSE_INFORMATION_SERVICE_FUNCTION = "mod_assign_get_assignments";
     private static String GET_COURSE_CONTENTS_SERVICE_FUNCTION = "core_course_get_contents";
     private static String GET_SUBMISSIONS_SERVICE_FUNCTION = "mod_assign_get_submissions";
+    private static String GET_GRADES_SERVICE_FUNCTION = "gradereport_user_get_grade_items";
     
     public CoursesHelper(){
         
@@ -308,6 +310,9 @@ public class CoursesHelper {
     //function to save the assignements of a course
     public void saveAssignments(JSONArray ass_jarr, Cours cours, JSONObject ass_completion_data) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
 
+        /* Récupérons les notes des devoirs de ce cours */
+        JSONObject notes = this.getCourseGrades(cours); System.out.println(notes);
+                
         for(int m = 0; m < ass_jarr.size(); m++){
             
             //System.out.println("Valeur ass_jarr :" + ass_jarr);
@@ -337,6 +342,15 @@ public class CoursesHelper {
                 Timestamp ts = new Timestamp((long)str.get("duedate")*1000); 
                 Date due_date = new Date(ts.getTime());
                 Devoirs devoirs = new Devoirs(cours, name, due_date, etat, remoteId, new Date(), new Date(), new HashSet(), new HashSet());
+                //Mise à jour de la note
+                try{
+                    List notesList = (ArrayList) notes.get(str.get("id"));
+                    if(notesList.get(0)!= null) devoirs.setNote(Integer.valueOf(notesList.get(0).toString()));
+                    if(notesList.get(1)!= null) devoirs.setNoteMax(Integer.valueOf(notesList.get(1).toString()));
+                }catch(NullPointerException e){
+                    System.out.println("Erreur lors de l'accès à la note du devoir de remoteId" + remoteId);
+                }
+                
                 Moodleclient.session.beginTransaction();
                 Moodleclient.session.save(devoirs);
                 Moodleclient.session.getTransaction().commit();
@@ -418,6 +432,68 @@ public class CoursesHelper {
             
         }
     }
+    
+    
+        //Récupère les notes obtenues aux devoirs d'une matière
+        public JSONObject getCourseGrades(Cours cours) throws MalformedURLException, IOException, ParseException, ServerUnreachableException{
+            JSONObject result = new JSONObject();
+            
+            String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + CoursesHelper.GET_GRADES_SERVICE_FUNCTION+ "&moodlewsrestformat=json&courseid=" + cours.getRemoteId() + "&userid=" + Moodleclient.user.getRemoteId() + "&wstoken=" + Moodleclient.PRIVILEGED_TOKEN;
+            
+        URL url = new URL(url_str);
+            
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+        con.setRequestMethod("GET");
+        con.connect();
+            
+        int status = con.getResponseCode();
+                    
+        if(status == 200){
+            //the server is reachable
+            //get the request response
+            String res = "";
+
+            Scanner sc = new Scanner(url.openStream());
+
+            while(sc.hasNext()){
+                res += sc.nextLine();
+            }
+            
+            JSONParser parse = new JSONParser();
+            
+            JSONObject gradeObj = (JSONObject) parse.parse(res);
+            JSONArray gradeArr = (JSONArray) gradeObj.get("usergrades");
+            
+            JSONObject tempObj; JSONArray tempArr;
+            
+            for(int i=0; i<gradeArr.size(); i++){
+                tempObj = (JSONObject) gradeArr.get(i);
+                tempArr = (JSONArray) tempObj.get("gradeitems");
+                
+                for(int j=0; j<tempArr.size(); j++){
+                    JSONObject obj = (JSONObject) tempArr.get(j); System.out.println("obj"+obj);
+                    
+                    if(obj.get("itemmodule") != null && obj.get("itemmodule").toString().equalsIgnoreCase("assign")){
+                        List<Object> notes = new ArrayList<Object>();
+                        notes.add(obj.get("graderaw"));
+                        notes.add(obj.get("grademax"));
+
+                        result.put(obj.get("iteminstance"), notes);
+                    }
+                    
+                }
+                
+            }
+                
+        }else{
+            //the server is not reachable
+            //***************************
+            throw new ServerUnreachableException("Server unreachable");
+        }
+        
+            return result;
+        }
     
     
         public void pullAssignmentSubmissions(Devoirs dev) throws MalformedURLException, IOException, ServerUnreachableException, ParseException{

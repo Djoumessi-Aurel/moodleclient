@@ -56,11 +56,21 @@ public class SubmitAssignmentController implements Initializable{
     private ScrollPane scrollpane;
     
     private List<File> filesList = new ArrayList<File>();
+    private List devoirs;
+    private Devoirs devoir = null;
+    private boolean viewOnly = false; //On est en mode viewOnly lorsque le devoir est déjà noté
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
        // TODO Auto-generated method stub
-        
+       devoirs = Moodleclient.session.createQuery("from Devoirs D where D.id=" + Moodleclient.currentAssignmentId).list();
+       if(devoirs.size()>0){
+           devoir = (Devoirs) devoirs.get(0);
+           if(devoir.getNote() != null){
+               viewOnly = true;
+               fileChooser.setDisable(true); btnSave.setDisable(true); btnCancel.setDisable(true);
+           }
+       }
        loadSubmissions();
     }
 
@@ -81,18 +91,18 @@ public class SubmitAssignmentController implements Initializable{
         
         List<File> files = fc.showOpenMultipleDialog(null);
         
-        for (int i = 0; i< files.size(); i++){
             if (files != null){
-               list.appendText(files.get(i).getAbsoluteFile()+ "\n");
-               //filesList.getItems().add(files.get(i).getAbsolutePath());
-               
-               //append the file to the files List
-               filesList.add(files.get(i));
+                for (int i = 0; i< files.size(); i++){
+                    list.appendText(files.get(i).getAbsoluteFile()+ "\n");
+                    //filesList.getItems().add(files.get(i).getAbsolutePath());
+
+                    //append the file to the files List
+                    filesList.add(files.get(i));
+                }
                 
             }else{
                 System.out.println("File is invalid!");
             }
-        }
             
     }
     
@@ -110,12 +120,8 @@ public class SubmitAssignmentController implements Initializable{
 
             commandRunner.start();
             
-            //save the file in the database
-            List devoirs = Moodleclient.session.createQuery("from Devoirs D where D.id=" + Moodleclient.currentAssignmentId).list();
-            
-            if(devoirs.size() > 0){
-                
-                Devoirs devoir = (Devoirs) devoirs.get(0);
+            //save the file in the database            
+            if(devoir != null){
                 
                 byte b = 0;
                 AssignmentSubmission subFile = new AssignmentSubmission(devoir, file.getName(), hashName, new Date(), new Date(), b);
@@ -180,6 +186,12 @@ public class SubmitAssignmentController implements Initializable{
 
                 //set the delete button
                 ImageView deleteImg = (ImageView) fileLoader.getNamespace().get("deleteBtn");
+                
+                if(viewOnly){
+                    //disable the delete button
+                    deleteImg.setDisable(true);
+                    deleteImg.setVisible(false);
+                }
 
                 deleteImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override

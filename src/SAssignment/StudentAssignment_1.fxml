@@ -50,8 +50,8 @@
                         </Label>
                         <GridPane fx:id="gridpane" maxWidth="1.7976931348623157E308">
                            <columnConstraints>
-                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="0.0" />
-                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="0.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="313.0" minWidth="0.0" prefWidth="313.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="371.0" minWidth="0.0" prefWidth="267.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -59,7 +59,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <AnchorPane style="-fx-background-color: #F5F5F5;">
+                              <AnchorPane prefWidth="200.0" style="-fx-background-color: #F5F5F5;">
                                  <children>
                                     <Label text="Submission status: ">
                                        <font>
@@ -77,7 +77,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane GridPane.rowIndex="1">
+                              <AnchorPane prefWidth="200.0" GridPane.rowIndex="1">
                                  <children>
                                     <Label prefHeight="30.0" prefWidth="225.0" style="-fx-background-color: #FBFBF9;" text="Due date: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <font>
