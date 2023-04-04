@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane minHeight="80.0" minWidth="248.0" prefHeight="80.0" prefWidth="248.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="80.0" prefWidth="248.0">
+         <children>
+            <Separator prefHeight="3.0" prefWidth="253.0" />
+            <Label fx:id="titreDevoir" text="Devoir" textFill="#27a0d0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons8_pencil_48px_1.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Label fx:id="matiere" text="Matière">
+               <VBox.margin>
+                  <Insets left="24.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="note" prefWidth="178.0" text="Note">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="24.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</Pane>
