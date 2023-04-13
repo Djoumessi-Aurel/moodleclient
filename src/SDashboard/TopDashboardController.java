@@ -37,6 +37,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -87,6 +88,8 @@ public class TopDashboardController implements Initializable {
     private int numberOfSyncThreads = 2;
     
     @FXML
+    private HBox moodleLayout;
+    @FXML
     private JFXButton syncBtn;
     @FXML
     private ImageView syncImg;
@@ -100,6 +103,8 @@ public class TopDashboardController implements Initializable {
     private MenuItem syncMenu;
     @FXML
     private MenuItem logOutMenu;
+    @FXML
+    private Label teacherLabel;
 
     @FXML
     private Label syncingText;
@@ -109,6 +114,14 @@ public class TopDashboardController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //Mise en forme du Top dashboard en mode enseignant
+        if(!Moodleclient.user.isStudent()){
+            moodleLayout.setStyle("-fx-background-color:  #BBE0F2");  // #DCF2FF          
+        }
+        else{
+            teacherLabel.setVisible(false);
+        }
         
         new ConnectivityListenner().start();
         
@@ -267,32 +280,6 @@ public class TopDashboardController implements Initializable {
             
             Tooltip toolTextSync = new Tooltip(stopSyncText);
             syncBtn.setTooltip(toolTextSync);
-            
-            //AnchorPane leftMenu =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/leftDashboard.fxml"));
-            //Moodleclient.root.setLeft(leftMenu);
-            /*try{
-            AnchorPane content = null;
-            root.setCenter(new AnchorPane());
-            // On sélectionne l'onglet courant
-                switch(Moodleclient.CURRENT_TAB){
-                        case DASHBOARD:
-                            //selectButton(btnDashboard);
-                            content =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
-                            break;
-                        case PRIVATE_FILES:
-                           // selectButton(btnPrivateFiles);
-                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SSavePrivateFiles/StudentSavePrivateFiles_1.fxml"));
-                            break;
-                        case ASSIGNMENTS:
-                           // selectButton(btnAssignments);
-                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml"));
-                            break;
-                    }
-
-                root.setCenter(content);
-                }catch(IOException e){
-                    e.printStackTrace();
-                }*/
             
         } else {            
             this.stopSyncAnimation();

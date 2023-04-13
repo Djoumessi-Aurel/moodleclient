@@ -116,7 +116,9 @@ public class LeftDashboardController implements Initializable {
     @FXML
     private void handleButtonSAssignment(ActionEvent event) throws IOException {
 
-        AnchorPane content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml"));
+        AnchorPane content;
+        if(Moodleclient.user.isStudent()) content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml")); //Si étudiant
+        else content = null; //Si enseignant
 
         root.setCenter(content);
         

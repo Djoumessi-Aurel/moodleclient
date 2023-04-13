@@ -58,11 +58,62 @@ public class CoursesHelper {
     private static String GET_COURSE_CONTENTS_SERVICE_FUNCTION = "core_course_get_contents";
     private static String GET_SUBMISSIONS_SERVICE_FUNCTION = "mod_assign_get_submissions";
     private static String GET_GRADES_SERVICE_FUNCTION = "gradereport_user_get_grade_items";
+    private static String GET_ENROLLMENTS_SERVICE_FUNCTION = "core_enrol_get_enrolled_users";
     
     public CoursesHelper(){
         
     }
     
+    //Make a get request to moodle API and return the result as String
+    public String getAPIResult(String url_str) throws MalformedURLException, IOException, ParseException, ServerUnreachableException{
+                   
+        URL url = new URL(url_str);
+            
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+        con.setRequestMethod("GET");
+        con.connect();
+            
+        int status = con.getResponseCode();
+        String res = "";
+            
+        if(status == 200){
+            //the server is reachable, get the request response
+
+            Scanner sc = new Scanner(url.openStream());
+
+            while(sc.hasNext()){
+                res += sc.nextLine();
+            }
+                
+        }else{
+            //the server is not reachable
+            throw new ServerUnreachableException("Server unreachable");
+        }
+        
+        return res;
+    }
+    
+    //returns true if the given user has the given role ("student" or "editingteacher") for the given course (the ids are remote ids)
+    public boolean userHasRoleForCourse(Integer userId, String courseId, String role) throws IOException, ServerUnreachableException, ParseException{
+        
+        String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + CoursesHelper.GET_ENROLLMENTS_SERVICE_FUNCTION +"&moodlewsrestformat=json&courseid=" + courseId + "&wstoken=" + Moodleclient.user.getToken();
+        String res = this.getAPIResult(url_str);
+        
+        JSONParser parse = new JSONParser();            
+        JSONArray jarr = (JSONArray) parse.parse(res);
+        
+        for(int i=0; i<jarr.size(); i++){
+            JSONObject jobj = (JSONObject) jarr.get(i);
+            if( ! jobj.get("id").toString().equalsIgnoreCase(String.valueOf(userId))) continue;
+            
+            JSONArray roles = (JSONArray) jobj.get("roles");
+            String a_role = ((JSONObject)roles.get(0)).get("shortname").toString();
+            
+            return a_role.equalsIgnoreCase(role);
+        }
+        return false;
+    }
    
     //function to get the informations of a given course
     public JSONArray pullCourse(String courseId) throws MalformedURLException, IOException, ServerUnreachableException, ParseException{
@@ -193,18 +244,22 @@ public class CoursesHelper {
         for(int i = 0; i < coursesjarr.size(); i++){
             
             JSONObject assignmentCompletionData = new JSONObject(); //Permettra de savoir si tel devoir a été remis ou pas. clé = remoteId du devoir. valeur = 1 (remis) ou 0 (non remis)
-            
-            Moodleclient.session.beginTransaction();
         
             //save the course
             JSONObject jobj = (JSONObject) coursesjarr.get(i);
-          
-            Cours cours = new Cours(jobj.get("fullname").toString(), jobj.get("shortname").toString(), jobj.get("id").toString(), new Date(), new Date(), new HashSet(), new HashSet());
+            String courseId = jobj.get("id").toString();
+            String a_role = Moodleclient.user.isStudent() ? "student" : "editingteacher";
+            
+            if(!this.userHasRoleForCourse(Moodleclient.user.getRemoteId(), courseId, a_role)) continue; //Si le cours ne correspond pas au rôle de l'user, on passe au suivant
+            
+            Moodleclient.session.beginTransaction();
+            
+            Cours cours = new Cours(jobj.get("fullname").toString(), jobj.get("shortname").toString(), courseId, new Date(), new Date(), new HashSet(), new HashSet());
        
             Moodleclient.session.save(cours);
             
             //get the informations about the course
-            JSONArray courseData = this.pullCourse(jobj.get("id").toString());
+            JSONArray courseData = this.pullCourse(courseId);
             
             //save the sections of the course
             for(int j = 0; j < courseData.size(); j++){

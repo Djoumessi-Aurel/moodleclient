@@ -103,8 +103,9 @@ public class Users  implements java.io.Serializable {
         this.remoteId = remoteId;
     }
 
-
-
+    public boolean isStudent(){
+        return this.isSudent == 1;
+    }
 
 }
 
