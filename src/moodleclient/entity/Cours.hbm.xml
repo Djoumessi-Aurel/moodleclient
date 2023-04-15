@@ -11,6 +11,9 @@
         <property name="nom" type="string">
             <column name="nom" />
         </property>
+        <property name="nomAbrege" type="string">
+            <column name="nom_abrege" />
+        </property>
         <property name="description" type="string">
             <column name="description" />
         </property>

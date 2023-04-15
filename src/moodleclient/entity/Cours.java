@@ -14,6 +14,7 @@ public class Cours  implements java.io.Serializable {
 
      private Integer id;
      private String nom;
+     private String nomAbrege;
      private String description;
      private String remoteId;
      private Date createdAt;
@@ -28,8 +29,9 @@ public class Cours  implements java.io.Serializable {
     public Cours(String remoteId) {
         this.remoteId = remoteId;
     }
-    public Cours(String nom, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses) {
+    public Cours(String nom, String nomAbrege, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses) {
        this.nom = nom;
+       this.nomAbrege = nomAbrege;
        this.description = description;
        this.remoteId = remoteId;
        this.createdAt = createdAt;
@@ -54,6 +56,14 @@ public class Cours  implements java.io.Serializable {
     }
     public String getDescription() {
         return this.description;
+    }
+    
+    public String getNomAbrege() {
+        return nomAbrege;
+    }
+
+    public void setNomAbrege(String nomAbrege) {
+        this.nomAbrege = nomAbrege;
     }
     
     public void setDescription(String description) {

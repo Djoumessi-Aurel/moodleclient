@@ -5,21 +5,9 @@
  */
 package moodleclient.helpers;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import moodleclient.entity.CourseFile;
 import moodleclient.entity.PrivateFile;
 import moodleclient.exceptions.NotValidSessionException;
 import moodleclient.exceptions.ServerUnreachableException;
@@ -49,31 +37,12 @@ public class PrivateFileHelper {
         //get the list of private file objects
 
         String url_str = moodleclient.Moodleclient.serverAddress + "webservice/rest/server.php?contextlevel=user&instanceid=" + moodleclient.Moodleclient.user.getRemoteId() + "&component=user&filearea=private&itemid=0&contextid=-1&filepath=&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&wsfunction=core_files_get_files&moodlewsrestformat=json&filename";
-        URL url = new URL(url_str);
-
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-        con.setRequestMethod("GET");
-        con.connect();
-            
-        int status = con.getResponseCode();
-        JSONArray jarr;
-            
-        if(status == 200){
-            //the server is reachable
-            //get the request response
-            String res = "";
-
-            Scanner sc = new Scanner(url.openStream());
-
-            while(sc.hasNext()){
-                res += sc.nextLine();
-            }
+        String res = RequestAPI.getAPIResult(url_str);
 
             JSONParser parse = new JSONParser();
             JSONObject jobj = (JSONObject) parse.parse(res);
             
-            jarr = (JSONArray) parse.parse(jobj.get("files").toString());
+            JSONArray jarr = (JSONArray) parse.parse(jobj.get("files").toString());
             
             Session session = HibernateUtil.getSessionFactory().openSession();
                 
@@ -92,27 +61,10 @@ public class PrivateFileHelper {
                 
                 //build the url to download the file
                 String file_str_url = moodleclient.Moodleclient.serverAddress + "webservice/pluginfile.php/" + contextid + "/user/private/" + encodedFileName + "?forcedownload=1&token=" + moodleclient.Moodleclient.user.getToken();
-                
+                String hashName = (new Date()).getTime() + "_" + fileName;
                 
                 //downloading the file
-                URL fileURL = new URL(file_str_url);
-                        
-                InputStream in = fileURL.openStream();
-
-                String hashName = (new Date()).getTime() + "_" + fileName;
-
-                FileOutputStream fos = new FileOutputStream("./files/" + hashName);
-
-                int length = -1;
-
-                byte[] buffer = new byte[1024];// buffer for portion of data from connection
-
-                while ((length = in.read(buffer)) > -1) {
-                    fos.write(buffer, 0, length);
-                }
-
-                fos.close();
-                in.close();
+                Downloader.downloadFile(file_str_url, hashName);
                 
                 byte b = 1;
                 
@@ -134,10 +86,5 @@ public class PrivateFileHelper {
             session2.getTransaction().commit();
             session2.close();
             
-        }else{
-            //the server is not reachable
-            //***************************
-            throw new ServerUnreachableException("Server unreachable");
-        }
     }
 }
