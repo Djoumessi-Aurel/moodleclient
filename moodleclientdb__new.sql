@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `assignment_submission` (
   UNIQUE KEY `hash_name_UNIQUE` (`hash_name`),
   KEY `devoirId` (`devoirId`),
   CONSTRAINT `fk_assignment_submission_1` FOREIGN KEY (`devoirId`) REFERENCES `devoirs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=760 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. cours
@@ -33,12 +33,14 @@ DROP TABLE IF EXISTS `cours`;
 CREATE TABLE IF NOT EXISTS `cours` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) DEFAULT NULL,
+  `nom_abrege` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `remoteId` varchar(255) NOT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=831 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. course_file
@@ -50,11 +52,12 @@ CREATE TABLE IF NOT EXISTS `course_file` (
   `sectionId` int DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hash_name_UNIQUE` (`hash_name`),
   KEY `sectionId` (`sectionId`),
   CONSTRAINT `fk_course_file_1` FOREIGN KEY (`sectionId`) REFERENCES `sections` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1970 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. devoirs
@@ -75,9 +78,8 @@ CREATE TABLE IF NOT EXISTS `devoirs` (
   PRIMARY KEY (`id`),
   KEY `coursId` (`coursId`),
   CONSTRAINT `devoirs_ibfk_1` FOREIGN KEY (`coursId`) REFERENCES `cours` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=529 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Les données exportées n'étaient pas sélectionnées.
 
 -- Listage de la structure de table moodleclientdb. private_file
 DROP TABLE IF EXISTS `private_file`;
@@ -90,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `private_file` (
   `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hash_name_UNIQUE` (`hash_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1338 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. ressource_devoir
@@ -106,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `ressource_devoir` (
   UNIQUE KEY `hash_name_UNIQUE` (`hash_name`),
   KEY `devoirId` (`devoirId`),
   CONSTRAINT `fk_ressource_devoir_1` FOREIGN KEY (`devoirId`) REFERENCES `devoirs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. sections
@@ -118,10 +120,11 @@ CREATE TABLE IF NOT EXISTS `sections` (
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `remote_id` int DEFAULT NULL,
+  `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `courId` (`courId`),
   CONSTRAINT `sections_ibfk_1` FOREIGN KEY (`courId`) REFERENCES `cours` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4515 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- Listage de la structure de table moodleclientdb. users
@@ -138,4 +141,5 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remoteId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
