@@ -26,6 +26,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import login.Dry;
+import moodleclient.entity.Cours;
+import moodleclient.entity.Sections;
 
 import moodleclient.entity.Users;
 import moodleclient.helpers.AccountHelper;
@@ -52,6 +54,9 @@ public class Moodleclient extends Application {
     public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
     
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy , HH:mm");
+    
+    public static Cours dashboardCourse = null; //Le cours actuellement sélectionné dans "dashboard"
+    public static Sections dashboardSection = null; //La section actuellement sélectionnée dans "dashboard"
     
     public static boolean autoSync;
     
@@ -113,8 +118,8 @@ public class Moodleclient extends Application {
         }
         
         stage.setScene(scene);
-        stage.setMinWidth(1000);
-        stage.setHeight(600);
+        stage.setMinWidth(1080);
+        stage.setHeight(650);
         stage.show();
     }
 

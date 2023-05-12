@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,7 +45,7 @@ public class DashboardController implements Initializable{
   
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
-        
+        System.out.println("### INIT DASHBOARD ###");
         if(Moodleclient.courses.size() > 0){
             GridPane gridpane = new GridPane();
 
@@ -64,6 +65,8 @@ public class DashboardController implements Initializable{
                         public void handle(MouseEvent event) {
 
                             try {
+                                Moodleclient.dashboardCourse = cours;
+                                
                                 //load the anchorPane for the view of the course
                                 FXMLLoader courseLoader = new FXMLLoader(getClass().getResource("/SCourse/StudentCourse.fxml"));
 
@@ -98,6 +101,16 @@ public class DashboardController implements Initializable{
 
                                     Label sectionName = (Label) sectionLoader.getNamespace().get("sectionName");
                                     sectionName.setText(section.getNom());
+                                    
+                                    Label labelGererRessources = (Label) sectionLoader.getNamespace().get("labelGererRessources");
+                                    
+                                    labelGererRessources.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+                                        @Override
+                                        public void handle(MouseEvent event) {
+                                            Moodleclient.dashboardSection = section;
+                                            System.out.println("Section mise à jour");
+                                        }                                        
+                                    });
 
                                     //load and set the files of the section
                                     BorderPane filesBorderPane = (BorderPane) sectionLoader.getNamespace().get("filesBorderPane");
@@ -131,9 +144,6 @@ public class DashboardController implements Initializable{
                                         });
 
                                         Label fileName = (Label) fileLoader.getNamespace().get("fileName");
-
-                                        BorderPane t = new BorderPane();
-
 
 
                                         fileName.setText(courseFile.getFileName());

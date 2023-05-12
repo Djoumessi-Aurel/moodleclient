@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="140.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SCourse.CourseSectionController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="always" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SCourse.CourseSectionController">
    <children>
-      <Pane layoutX="14.0" layoutY="3.0" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="800.0" style="-fx-border-color: transparent transparent  D1D0CE transparent; -fx-border-style: sol;">
+      <VBox VBox.vgrow="always">
          <children>
-            <Label fx:id="sectionName" layoutX="24.0" layoutY="9.0" text="Topic 1" textFill="#27a0d0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
+            <Pane maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="787.0" style="-fx-border-color: transparent transparent  D1D0CE transparent; -fx-border-style: sol;" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="787.0">
+                     <children>
+                        <Label fx:id="sectionName" minWidth="150.0" text="Topic 1" textFill="#27a0d0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="30.0" right="100.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="labelGererRessources" onMouseClicked="#handleGererRessources" prefWidth="110.0" text="Gérer les ressources" textFill="#11678a" underline="true">
+                           <font>
+                              <Font name="System Italic" size="13.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Pane>
+            <BorderPane fx:id="filesBorderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="40.0" VBox.vgrow="ALWAYS">
+               <center>
+                  <Pane fx:id="filesPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+               </center>
+            </BorderPane>
          </children>
-      </Pane>
-      <BorderPane fx:id="filesBorderPane" layoutX="21.0" layoutY="55.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="640.0">
-         <center>
-            <Pane fx:id="filesPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="640.0" />
-         </center>
-      </BorderPane>
+      </VBox>
    </children>
 </Pane>
