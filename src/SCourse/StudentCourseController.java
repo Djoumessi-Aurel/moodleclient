@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import moodleclient.Moodleclient;
+import moodleclient.entity.Cours;
+import moodleclient.helpers.DialogCreator;
 
 public class StudentCourseController implements Initializable{
 	
@@ -80,6 +83,11 @@ public class StudentCourseController implements Initializable{
     @FXML
     public void handleModifyCourse(){
         System.out.println("MODIFICATION DU COURS " + Moodleclient.dashboardCourse.getNom());
+        Optional<Cours> opCourse = DialogCreator.launchCourseDialog("modify", Moodleclient.dashboardCourse);
+        
+        if(opCourse.isPresent()){
+            System.out.println(opCourse.get().getNom());
+        }
     }
 
 }

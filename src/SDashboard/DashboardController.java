@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Timer;
@@ -32,6 +33,7 @@ import moodleclient.Moodleclient.FileLauncher;
 import moodleclient.entity.Cours;
 import moodleclient.entity.CourseFile;
 import moodleclient.entity.Sections;
+import moodleclient.helpers.DialogCreator;
 import moodleclient.helpers.SortableSection;
 import moodleclient.util.HibernateUtil;
 import org.hibernate.Session;
@@ -199,6 +201,11 @@ public class DashboardController implements Initializable{
     @FXML
     public void handleNewCourse(){
         System.out.println("CREATION D'UN NOUVEAU COURS");
+        Optional<Cours> opCourse = DialogCreator.launchCourseDialog("create", null);
+        
+        if(opCourse.isPresent()){
+            System.out.println(opCourse.get().getNom());
+        }
     }
         
 }

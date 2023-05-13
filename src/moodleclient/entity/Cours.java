@@ -31,6 +31,14 @@ public class Cours  implements java.io.Serializable {
     public Cours(String remoteId) {
         this.remoteId = remoteId;
     }
+    
+    //Ce constructeur servira uniquement à récupérer les données saisies dans le formulaire de création/modification de cours
+    public Cours(String nom, String nomAbrege, String description){
+        this.nom = nom;
+        this.nomAbrege = nomAbrege;
+        this.description = description;
+    }
+    
     public Cours(String nom, String nomAbrege, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses, Byte synced) {
        this.nom = nom;
        this.nomAbrege = nomAbrege;
