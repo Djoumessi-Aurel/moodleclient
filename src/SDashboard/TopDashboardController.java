@@ -7,15 +7,7 @@ package SDashboard;
 
 import com.jfoenix.controls.JFXButton;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,13 +22,11 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.paint.Color;
@@ -46,13 +36,10 @@ import login.Dry;
 import moodleclient.LogOutAlertBox;
 import moodleclient.Moodleclient;
 import static moodleclient.Moodleclient.root;
-import moodleclient.SyncAlertBox;
 import moodleclient.exceptions.ServerUnreachableException;
 import moodleclient.helpers.CoursesHelper;
 import moodleclient.util.HibernateUtil;
-import org.hibernate.Session;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import moodleclient.SyncAlertBox;
 import moodleclient.entity.AssignmentSubmission;
@@ -209,53 +196,75 @@ public class TopDashboardController implements Initializable {
             
             // FIN DE L'UPLOAD DES FICHIERS PRIVES
             
-            //upload the assignment submissions //UPLOADER LES SOUMISSIONS DE DEVOIRS
-            Moodleclient.session.beginTransaction();
+            //upload the assignment submissions //UPLOADER LES SOUMISSIONS DE DEVOIRS (On le fait seulement si on est en mode étudiant)
             
-            List submissions = Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.synced=0").list();
-            
-            for(Object obj: submissions){
+            if(Moodleclient.user.isStudent()){
                 
-                AssignmentSubmission submission = (AssignmentSubmission) obj;
+                Moodleclient.session.beginTransaction();
+
+                List submissions = Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.synced=0").list();
+
+                for(Object obj: submissions){
+
+                    AssignmentSubmission submission = (AssignmentSubmission) obj;
+
+                    //build the url to update the file in the user's draft
+                    String request = "curl -X POST -F \"file_1=@./files/" + submission.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
+
+                    String requestResponse = new RequestCommand(request).runCommand();
+                    System.out.println(requestResponse);
+                    //build the request to move the file to the private area of the user
+                    JSONParser parser = new JSONParser();
+
+                    JSONArray jarr = (JSONArray) parser.parse(requestResponse);
+
+                    JSONObject jobj = (JSONObject) jarr.get(0);
+
+                    //move the file to the private files of the user
+                    //build the request
+                    String draftId = jobj.get("itemid").toString();
+
+                    String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data \"wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "\"" ;
+                    System.out.println(request2);
+
+                    String requestResponse2 = new RequestCommand(request2).runCommand();
+
+                    System.out.println(requestResponse2);
+
+                    //set the current private file as uploaded
+                    byte b = 1;
+
+                    submission.setSynced(b);
+
+                    Moodleclient.session.save(submission);
+                }
+
+                Moodleclient.session.getTransaction().commit();
                 
-                //build the url to update the file in the user's draft
-                String request = "curl -X POST -F \"file_1=@./files/" + submission.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                String requestResponse = new RequestCommand(request).runCommand();
-                System.out.println(requestResponse);
-                //build the request to move the file to the private area of the user
-                JSONParser parser = new JSONParser();
-                
-                JSONArray jarr = (JSONArray) parser.parse(requestResponse);
-                
-                JSONObject jobj = (JSONObject) jarr.get(0);
-                
-                //move the file to the private files of the user
-                //build the request
-                String draftId = jobj.get("itemid").toString();
-                
-                String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data \"wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "\"" ;
-                System.out.println(request2);
-                
-                String requestResponse2 = new RequestCommand(request2).runCommand();
-                
-                System.out.println(requestResponse2);
-                
-                //set the current private file as uploaded
-                byte b = 1;
-                
-                submission.setSynced(b);
-                
-                Moodleclient.session.save(submission);
             }
-            
-            Moodleclient.session.getTransaction().commit();
             
             // FIN DE L'UPLOAD DES SOUMISSIONS DE DEVOIRS
             
             Moodleclient.session.close();
             
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+            
+            
+            // UPLOAD DES COURS, SECTIONS ET COURSEFILES NON SYNCHRONISES (Uniquement en mode enseignant)
+            
+            if(!Moodleclient.user.isStudent()){
+                
+                Moodleclient.session.beginTransaction();
+                
+                /* PLACER LE CODE ICI*/
+                
+                Moodleclient.session.getTransaction().commit();
+                Moodleclient.session.close();
+                Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+                
+            }
+            
+            // FIN DE L'UPLOAD DES COURS, SECTIONS ET COURSEFILES NON SYNCHRONISES
             
             
             //DELETE THE DOWNLOADED FILES

@@ -39,7 +39,18 @@
                                     <Font name="System Bold Italic" size="16.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="100.0" top="5.0" />
+                                    <Insets left="20.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="labelDeleteCourse" onMouseClicked="#handleDeleteCourse" text="Supprimer" textFill="#c92819" underline="true">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <font>
+                                    <Font name="System Bold Italic" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="5.0" />
                                  </HBox.margin>
                               </Label>
                            </children>

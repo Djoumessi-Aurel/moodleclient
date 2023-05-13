@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -28,8 +30,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import login.Dry;
 import moodleclient.Moodleclient;
 import moodleclient.Moodleclient.FileLauncher;
+import static moodleclient.Moodleclient.root;
 import moodleclient.entity.Cours;
 import moodleclient.entity.CourseFile;
 import moodleclient.entity.Sections;
@@ -199,12 +203,31 @@ public class DashboardController implements Initializable{
     
     
     @FXML
-    public void handleNewCourse(){
-        System.out.println("CREATION D'UN NOUVEAU COURS");
+    public void handleNewCourse() throws IOException{
+        //System.out.println("CREATION D'UN NOUVEAU COURS");
         Optional<Cours> opCourse = DialogCreator.launchCourseDialog("create", null);
         
         if(opCourse.isPresent()){
-            System.out.println(opCourse.get().getNom());
+            Byte b = 0;
+            Cours cours = new Cours(opCourse.get().getNom(), opCourse.get().getNomAbrege(), opCourse.get().getDescription(), "-1", new Date(), new Date(), new HashSet(), new HashSet(), b);
+       
+            Moodleclient.session.beginTransaction();
+            
+            Moodleclient.session.save(cours); //Save the new course to database
+            
+            Moodleclient.session.save(new Sections(cours, "Généralités", new Date(), new Date(), -5, new HashSet(), (byte)0));
+            Moodleclient.session.save(new Sections(cours, "Section 1", new Date(), new Date(), -4, new HashSet(), (byte)0));
+            Moodleclient.session.save(new Sections(cours, "Section 2", new Date(), new Date(), -3, new HashSet(), (byte)0));
+            Moodleclient.session.save(new Sections(cours, "Section 3", new Date(), new Date(), -2, new HashSet(), (byte)0));
+            Moodleclient.session.save(new Sections(cours, "Section 4", new Date(), new Date(), -1, new HashSet(), (byte)0));
+            
+            Moodleclient.session.getTransaction().commit();
+            Moodleclient.session.close();
+        
+            Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+            
+            Moodleclient.courses =  Moodleclient.session.createQuery("from Cours").list();
+            new Dry().showDashboard(root); //Refresh the dashboard page
         }
     }
         
