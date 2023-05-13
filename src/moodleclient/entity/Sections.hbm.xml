@@ -29,5 +29,8 @@
             </key>
             <one-to-many class="moodleclient.entity.CourseFile" />
         </set>
+        <property name="synced" type="java.lang.Byte">
+            <column name="synced" />
+        </property>
     </class>
 </hibernate-mapping>

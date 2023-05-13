@@ -123,7 +123,8 @@ public class CoursesHelper {
             Moodleclient.session.beginTransaction();
             
             String shortname = jobj.get("shortname").toString();
-            Cours cours = new Cours(jobj.get("fullname").toString(), shortname, shortname, courseId, new Date(), new Date(), new HashSet(), new HashSet());
+            Byte b = 1;
+            Cours cours = new Cours(jobj.get("fullname").toString(), shortname, shortname, courseId, new Date(), new Date(), new HashSet(), new HashSet(), b);
        
             Moodleclient.session.save(cours);
             
@@ -135,7 +136,7 @@ public class CoursesHelper {
                 
                 JSONObject jsection = (JSONObject) courseData.get(j);
                 
-                Sections section = new Sections(cours, jsection.get("name").toString(), new Date(), new Date(), Integer.valueOf(jsection.get("id").toString()), new HashSet());
+                Sections section = new Sections(cours, jsection.get("name").toString(), new Date(), new Date(), Integer.valueOf(jsection.get("id").toString()), new HashSet(), (byte)1);
         
 
                 Moodleclient.session.save(section);
@@ -172,7 +173,7 @@ public class CoursesHelper {
                         Downloader.downloadFile(file_url, hashName);
                         
                         //create and save the course file in the database
-                        CourseFile courseFile = new CourseFile(section, jcontent.get("filename").toString(), hashName, new Date(), new Date());
+                        CourseFile courseFile = new CourseFile(section, jcontent.get("filename").toString(), hashName, new Date(), new Date(), (byte)1);
                         
                         Moodleclient.session.save(courseFile);
 

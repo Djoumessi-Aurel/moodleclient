@@ -114,7 +114,7 @@ public class ManageCourseFilesController implements Initializable{
             //save the file in the database            
                 
                 byte b = 0;
-                CourseFile cFile = new CourseFile(Moodleclient.dashboardSection, file.getName(), hashName, new Date(), new Date());
+                CourseFile cFile = new CourseFile(Moodleclient.dashboardSection, file.getName(), hashName, new Date(), new Date(), b);
             
                 Moodleclient.session.save(cFile);
                 

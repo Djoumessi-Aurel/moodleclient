@@ -6,22 +6,23 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="300.0" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.DashboardController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.DashboardController">
    <children>
-      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="468.0" prefWidth="694.0" style="-fx-background-color: FFFFF2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="468.0" style="-fx-background-color: FFFFF2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="357.0" prefWidth="300.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="357.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="52.0" />
                </BorderPane.margin>
                <children>
-                  <Pane layoutX="2.0" layoutY="-51.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="41.0" prefWidth="540.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="2.0">
+                  <Pane layoutX="2.0" layoutY="-51.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="41.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="2.0">
                      <children>
-                        <Label contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="159.0" style="-fx-background-color: FFFFFF;" text="Dashboard" textFill="#0a82c3">
+                        <Label contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" style="-fx-background-color: FFFFFF;" text="Dashboard" textFill="#0a82c3">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -31,16 +32,28 @@
                         </Label>
                      </children>
                   </Pane>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="357.0" prefWidth="259.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="500.0" prefHeight="357.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="186.0" text="Courses overview" textAlignment="CENTER" textFill="#4a4444ad">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="7.0" />
-                           </VBox.margin>
-                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="186.0" text="Courses overview" textAlignment="CENTER" textFill="#4a4444ad">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="labelNewCourse" onMouseClicked="#handleNewCourse" text="New course" textFill="#11678a" underline="true">
+                                 <font>
+                                    <Font name="System Italic" size="15.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="200.0" />
+                                 </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </HBox>
                         <ScrollPane fx:id="scrollpane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="550.0" />
                      </children>
                   </VBox>

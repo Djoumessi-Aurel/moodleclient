@@ -19,17 +19,20 @@ public class Sections  implements java.io.Serializable {
      private Date updatedAt;
      private Integer remoteId;
      private Set courseFiles = new HashSet(0);
+     private Byte synced;
+     
 
     public Sections() {
     }
 
-    public Sections(Cours cours, String nom, Date createdAt, Date updatedAt, Integer remoteId, Set courseFiles) {
+    public Sections(Cours cours, String nom, Date createdAt, Date updatedAt, Integer remoteId, Set courseFiles, Byte synced) {
        this.cours = cours;
        this.nom = nom;
        this.createdAt = createdAt;
        this.updatedAt = updatedAt;
        this.remoteId = remoteId;
        this.courseFiles = courseFiles;
+       this.synced = synced;
     }
    
     public Integer getId() {
@@ -81,8 +84,14 @@ public class Sections  implements java.io.Serializable {
     public void setCourseFiles(Set courseFiles) {
         this.courseFiles = courseFiles;
     }
+    
+    public Byte getSynced() {
+        return synced;
+    }
 
-
+    public void setSynced(Byte synced) {
+        this.synced = synced;
+    }
 
 
 }

@@ -16,6 +16,7 @@ public class CourseFile  implements java.io.Serializable {
      private String hashName;
      private Date createdAt;
      private Date updatedAt;
+     private Byte synced;
 
     public CourseFile() {
     }
@@ -24,12 +25,13 @@ public class CourseFile  implements java.io.Serializable {
     public CourseFile(String fileName) {
         this.fileName = fileName;
     }
-    public CourseFile(Sections sections, String fileName, String hashName, Date createdAt, Date updatedAt) {
+    public CourseFile(Sections sections, String fileName, String hashName, Date createdAt, Date updatedAt, Byte synced) {
        this.sections = sections;
        this.fileName = fileName;
        this.hashName = hashName;
        this.createdAt = createdAt;
        this.updatedAt = updatedAt;
+       this.synced = synced;
     }
    
     public Integer getId() {
@@ -74,7 +76,14 @@ public class CourseFile  implements java.io.Serializable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+    
+    public Byte getSynced() {
+        return synced;
+    }
 
+    public void setSynced(Byte synced) {
+        this.synced = synced;
+    }
 
 
 

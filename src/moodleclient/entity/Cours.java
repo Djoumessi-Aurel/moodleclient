@@ -21,6 +21,8 @@ public class Cours  implements java.io.Serializable {
      private Date updatedAt;
      private Set sectionses = new HashSet(0);
      private Set devoirses = new HashSet(0);
+     private Byte synced;
+
 
     public Cours() {
     }
@@ -29,7 +31,7 @@ public class Cours  implements java.io.Serializable {
     public Cours(String remoteId) {
         this.remoteId = remoteId;
     }
-    public Cours(String nom, String nomAbrege, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses) {
+    public Cours(String nom, String nomAbrege, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses, Byte synced) {
        this.nom = nom;
        this.nomAbrege = nomAbrege;
        this.description = description;
@@ -38,6 +40,7 @@ public class Cours  implements java.io.Serializable {
        this.updatedAt = updatedAt;
        this.sectionses = sectionses;
        this.devoirses = devoirses;
+       this.synced = synced;
     }
    
     public Integer getId() {
@@ -104,8 +107,14 @@ public class Cours  implements java.io.Serializable {
     public void setDevoirses(Set devoirses) {
         this.devoirses = devoirses;
     }
+    
+    public Byte getSynced() {
+        return synced;
+    }
 
-
+    public void setSynced(Byte synced) {
+        this.synced = synced;
+    }
 
 
 }

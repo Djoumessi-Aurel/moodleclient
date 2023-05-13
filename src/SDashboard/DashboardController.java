@@ -42,10 +42,17 @@ public class DashboardController implements Initializable{
 
     @FXML
     private ScrollPane scrollpane;
+    @FXML
+    private Label labelNewCourse;
   
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
-        System.out.println("### INIT DASHBOARD ###");
+        
+        if(Moodleclient.user.isStudent()){
+            labelNewCourse.setDisable(true);
+            labelNewCourse.setVisible(false);
+        }
+        
         if(Moodleclient.courses.size() > 0){
             GridPane gridpane = new GridPane();
 
@@ -186,6 +193,12 @@ public class DashboardController implements Initializable{
                 ex.printStackTrace();
             }
         }
+    }
+    
+    
+    @FXML
+    public void handleNewCourse(){
+        System.out.println("CREATION D'UN NOUVEAU COURS");
     }
         
 }

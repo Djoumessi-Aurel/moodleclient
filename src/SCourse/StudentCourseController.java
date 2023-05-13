@@ -16,12 +16,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+import moodleclient.Moodleclient;
 
 public class StudentCourseController implements Initializable{
 	
     
     @FXML
     private Label courseName;
+    @FXML
+    private Label labelModifyCourse;
 
     @FXML
     private ScrollPane scrollpane;
@@ -65,9 +68,18 @@ public class StudentCourseController implements Initializable{
 	}
     
     @Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        // TODO Auto-generated method stub
+        if(Moodleclient.user.isStudent()){
+            labelModifyCourse.setDisable(true);
+            labelModifyCourse.setVisible(false);
+        }
+
+    }
+    
+    @FXML
+    public void handleModifyCourse(){
+        System.out.println("MODIFICATION DU COURS " + Moodleclient.dashboardCourse.getNom());
+    }
 
 }
