@@ -257,6 +257,7 @@ public class TopDashboardController implements Initializable {
                 Moodleclient.session.beginTransaction();
                 
                 /* PLACER LE CODE ICI*/
+                CoursesHelper.uploadCourses();
                 
                 Moodleclient.session.getTransaction().commit();
                 Moodleclient.session.close();

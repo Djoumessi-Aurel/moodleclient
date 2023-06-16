@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import moodleclient.Moodleclient;
 import moodleclient.entity.AssignmentSubmission;
@@ -41,6 +43,7 @@ public class CoursesHelper {
     private static final String GET_SUBMISSIONS_SERVICE_FUNCTION = "mod_assign_get_submissions";
     private static final String GET_GRADES_SERVICE_FUNCTION = "gradereport_user_get_grade_items";
     private static final String GET_ENROLLMENTS_SERVICE_FUNCTION = "core_enrol_get_enrolled_users";
+    private static final String CREATE_COURSE_SERVICE_FUNCTION = "core_course_create_courses";
     
     public CoursesHelper(){
         
@@ -78,6 +81,28 @@ public class CoursesHelper {
             
         JSONArray jarr = (JSONArray) parse.parse(res);
         return jarr;
+    }
+    
+    //Only for the teacher
+    public static void uploadCourses() throws MalformedURLException, IOException, ParseException{
+        Cours a_cours;
+        for(Object cours: Moodleclient.courses){
+            a_cours = (Cours)cours;
+            if(a_cours.getSynced() == 1) continue;
+            
+            String nom = a_cours.getNom(), nom_abrege = a_cours.getNomAbrege(), description = a_cours.getDescription();
+           // http://localhost/moodle/webservice/rest/server.php?wstoken=MyToken&wsfunction=core_course_create_courses&moodlewsrestformat=json&courses[0][fullname]='EDV King'&courses[0][shortname] ='EDV_King'&courses[0][categoryid] =1
+            String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + CoursesHelper.CREATE_COURSE_SERVICE_FUNCTION + "&moodlewsrestformat=json" + "&courses[0][fullname]=\"" + a_cours.getNom() + "\"&courses[0][shortname]=\"" + a_cours.getNomAbrege() + "\"&wstoken=" + Moodleclient.user.getToken();
+            System.out.println(url_str);
+            String res;
+            try {
+                res = RequestAPI.getAPIResult(url_str);
+                System.out.println("*** Upload de cours ***\nRésultat: " + res);
+            } catch (ServerUnreachableException ex) {
+                System.out.println(ex.getMessage());
+            }
+            
+        }
     }
     
     //function to get the list of the courses of a given student

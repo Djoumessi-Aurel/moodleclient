@@ -50,7 +50,7 @@ public class Moodleclient extends Application {
     public static Users user;
     public static String sessionId = "";
     public static String serverAddress;
-    public static String PRIVILEGED_TOKEN = "185f29d0a8e97d6f1e578c2e54fff361"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
+    public static String PRIVILEGED_TOKEN = "c1b2822bd4e1187c62fd43aa765cd895"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
     public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
     
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy , HH:mm");

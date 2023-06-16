@@ -43,7 +43,7 @@ public class RequestAPI {
                 
         }else{
             //the server is not reachable
-            throw new ServerUnreachableException("Server unreachable");
+            throw new ServerUnreachableException("Server unreachable, response status = " + status);
         }
         
         return res;
