@@ -11,22 +11,6 @@ DROP DATABASE IF EXISTS `moodleclientdb`;
 CREATE DATABASE IF NOT EXISTS `moodleclientdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `moodleclientdb`;
 
--- Listage de la structure de table moodleclientdb. assignment_submission
-DROP TABLE IF EXISTS `assignment_submission`;
-CREATE TABLE IF NOT EXISTS `assignment_submission` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `file_name` varchar(255) NOT NULL,
-  `hash_name` varchar(255) DEFAULT NULL,
-  `devoirId` int DEFAULT NULL,
-  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `synced` tinyint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `hash_name_UNIQUE` (`hash_name`),
-  KEY `devoirId` (`devoirId`),
-  CONSTRAINT `fk_assignment_submission_1` FOREIGN KEY (`devoirId`) REFERENCES `devoirs` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 
 -- Listage de la structure de table moodleclientdb. cours
 DROP TABLE IF EXISTS `cours`;
@@ -40,6 +24,22 @@ CREATE TABLE IF NOT EXISTS `cours` (
   `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Listage de la structure de table moodleclientdb. sections
+DROP TABLE IF EXISTS `sections`;
+CREATE TABLE IF NOT EXISTS `sections` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) DEFAULT NULL,
+  `courId` int DEFAULT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `remote_id` int DEFAULT NULL,
+  `synced` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `courId` (`courId`),
+  CONSTRAINT `sections_ibfk_1` FOREIGN KEY (`courId`) REFERENCES `cours` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -81,20 +81,6 @@ CREATE TABLE IF NOT EXISTS `devoirs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Listage de la structure de table moodleclientdb. private_file
-DROP TABLE IF EXISTS `private_file`;
-CREATE TABLE IF NOT EXISTS `private_file` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `file_name` varchar(255) NOT NULL,
-  `hash_name` varchar(255) DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  `synced` tinyint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `hash_name_UNIQUE` (`hash_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
 -- Listage de la structure de table moodleclientdb. ressource_devoir
 DROP TABLE IF EXISTS `ressource_devoir`;
 CREATE TABLE IF NOT EXISTS `ressource_devoir` (
@@ -111,19 +97,34 @@ CREATE TABLE IF NOT EXISTS `ressource_devoir` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Listage de la structure de table moodleclientdb. sections
-DROP TABLE IF EXISTS `sections`;
-CREATE TABLE IF NOT EXISTS `sections` (
+-- Listage de la structure de table moodleclientdb. assignment_submission
+DROP TABLE IF EXISTS `assignment_submission`;
+CREATE TABLE IF NOT EXISTS `assignment_submission` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) DEFAULT NULL,
-  `courId` int DEFAULT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `hash_name` varchar(255) DEFAULT NULL,
+  `devoirId` int DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `remote_id` int DEFAULT NULL,
   `synced` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `courId` (`courId`),
-  CONSTRAINT `sections_ibfk_1` FOREIGN KEY (`courId`) REFERENCES `cours` (`id`)
+  UNIQUE KEY `hash_name_UNIQUE` (`hash_name`),
+  KEY `devoirId` (`devoirId`),
+  CONSTRAINT `fk_assignment_submission_1` FOREIGN KEY (`devoirId`) REFERENCES `devoirs` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Listage de la structure de table moodleclientdb. private_file
+DROP TABLE IF EXISTS `private_file`;
+CREATE TABLE IF NOT EXISTS `private_file` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) NOT NULL,
+  `hash_name` varchar(255) DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `synced` tinyint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hash_name_UNIQUE` (`hash_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
