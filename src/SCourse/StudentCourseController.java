@@ -92,7 +92,7 @@ public class StudentCourseController implements Initializable{
             labelModifyCourse.setVisible(false); labelDeleteCourse.setVisible(false);
         }
         
-        if(Moodleclient.dashboardCourse.getSynced() == 1){ //Si le cours existe déjà sur le serveur, on enlève le bouton "Delete"
+        if(Integer.valueOf(Moodleclient.dashboardCourse.getRemoteId()) > 0){ //Si le cours existe déjà sur le serveur, on enlève le bouton "Delete"
             labelDeleteCourse.setDisable(true); //labelModifyCourse.setDisable(true);
             labelDeleteCourse.setVisible(false); //labelModifyCourse.setVisible(false);
         }

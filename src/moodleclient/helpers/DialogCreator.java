@@ -75,9 +75,9 @@ public class DialogCreator {
         grid.add(new Label("Description: "), 0, 2);
         grid.add(description, 1, 2);
 
-        // Enable/Disable login button depending on whether a username was entered.
+        // Enable/Disable ok button depending on whether a course name was entered.
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
-        okButton.setDisable(true);
+        if(mode.equalsIgnoreCase("create")) okButton.setDisable(true);
 
         // Do some validation (using the Java 8 lambda syntax).
         name.textProperty().addListener((observable, oldValue, newValue) -> {
