@@ -3,54 +3,53 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="400.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.RightDashboardController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="571.0" prefWidth="261.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.RightDashboardController">
    <children>
       <ScrollPane minWidth="-Infinity" prefHeight="400.0" prefWidth="260.0" style="-fx-background-color: FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <VBox minWidth="-Infinity" prefWidth="260.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;">
+            <VBox prefHeight="560.0" prefWidth="260.0" style="-fx-background-color: FFFFFF;">
                <children>
-                  <Label prefHeight="37.0" prefWidth="107.0" text="Timeline">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Pane layoutX="11.0" layoutY="52.0" prefHeight="105.0">
+                  <VBox minWidth="-Infinity" prefHeight="145.0" prefWidth="260.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" VBox.vgrow="ALWAYS">
                      <children>
-                        <Separator layoutX="14.0" layoutY="1.0" prefHeight="3.0" prefWidth="253.0" />
-                        <Label layoutX="14.0" layoutY="2.0" text="Date de remise du devoir">
+                        <Label prefHeight="37.0" prefWidth="229.0" text="Devoirs à remettre">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="20.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
                         </Label>
-                        <Label layoutX="14.0" layoutY="27.0" text="Devoir" textFill="#27a0d0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/icons8_pencil_48px_1.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Label>
-                        <Label layoutX="37.0" layoutY="52.0" text="Matière" />
+                        <VBox fx:id="devoirsRemettreBox" prefHeight="221.0" prefWidth="229.0" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets />
+                        <Insets bottom="35.0" />
                      </VBox.margin>
-                  </Pane>
+                  </VBox>
+                  <VBox layoutX="10.0" layoutY="10.0" minWidth="-Infinity" prefHeight="145.0" prefWidth="260.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label prefHeight="37.0" prefWidth="229.0" text="Devoirs notés">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <VBox fx:id="devoirsNotesBox" prefHeight="221.0" prefWidth="229.0" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
          </content>

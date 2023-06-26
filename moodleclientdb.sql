@@ -1,4 +1,9 @@
-CREATE DATABASE `moodleclientdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+DROP DATABASE IF EXISTS `moodleclientdb`;
+
+CREATE DATABASE IF NOT EXISTS `moodleclientdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLAmoodleclientdbTE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `moodleclientdb`;
 
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -79,3 +84,4 @@ CREATE TABLE `ressource_devoirs` (
   KEY `devoirId` (`devoirId`),
   CONSTRAINT `ressource_devoirs_ibfk_1` FOREIGN KEY (`devoirId`) REFERENCES `devoirs` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+moodleclientdb

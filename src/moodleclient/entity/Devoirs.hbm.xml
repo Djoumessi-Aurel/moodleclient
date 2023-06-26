@@ -29,6 +29,18 @@
         <property name="updatedAt" type="timestamp">
             <column name="updatedAt" length="19" />
         </property>
+        <property name="note" type="java.lang.Integer">
+            <column name="note" />
+        </property>
+        <property name="noteMax" type="java.lang.Integer">
+            <column name="noteMax" />
+        </property>
+        <property name="noteVue" type="java.lang.Byte">
+            <column name="noteVue" />
+        </property>
+        <property name="ignored" type="java.lang.Byte">
+            <column name="ignored" />
+        </property>
         <set name="ressourceDevoirs" table="ressource_devoir" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="devoirId" />

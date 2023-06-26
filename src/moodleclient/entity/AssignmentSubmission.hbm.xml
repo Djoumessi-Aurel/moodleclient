@@ -26,5 +26,14 @@
         <property name="synced" type="java.lang.Byte">
             <column name="synced" />
         </property>
+        <property name="fullName" type="string">
+            <column name="full_name" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" />
+        </property>
+        <property name="grade" type="java.lang.Double">
+            <column name="grade" />
+        </property>
     </class>
 </hibernate-mapping>

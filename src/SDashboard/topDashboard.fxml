@@ -97,13 +97,13 @@
                   </ImageView>
                   <Label fx:id="username" text="Username" textFill="#72b7fc">
                      <padding>
-                        <Insets left="20.0" right="2.0" top="10.0" />
+                        <Insets left="20.0" right="2.0" top="5.0" />
                      </padding>
                      <font>
                         <Font size="14.0" />
                      </font>
                      <HBox.margin>
-                        <Insets top="7.0" />
+                        <Insets top="8.0" />
                      </HBox.margin>
                   </Label>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

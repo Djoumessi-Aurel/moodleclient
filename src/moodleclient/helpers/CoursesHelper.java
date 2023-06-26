@@ -21,13 +21,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import javafx.scene.control.Label;
 
 import moodleclient.Moodleclient;
+import moodleclient.entity.AssignmentSubmission;
 import moodleclient.entity.Cours;
 import moodleclient.entity.CourseFile;
 import moodleclient.entity.Devoirs;
@@ -54,9 +57,52 @@ public class CoursesHelper {
     private static String GET_COURSES_SERVICE_FUNCTION = "mod_assign_get_assignments";
     private static String GET_COURSE_INFORMATION_SERVICE_FUNCTION = "mod_assign_get_assignments";
     private static String GET_COURSE_CONTENTS_SERVICE_FUNCTION = "core_course_get_contents";
+    private static String GET_SUBMISSIONS_SERVICE_FUNCTION = "mod_assign_get_submissions";
+    private static String GET_GRADES_SERVICE_FUNCTION = "gradereport_user_get_grade_items";
     
     public CoursesHelper(){
         
+    }
+    
+   
+    //function to get the informations of a given course
+    public JSONArray pullCourse(String courseId) throws MalformedURLException, IOException, ServerUnreachableException, ParseException{
+   
+        String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + this.GET_COURSE_INFORMATION_SERVICE_FUNCTION + "&moodlewsrestformat=json&wsfunction=" + this.GET_COURSE_CONTENTS_SERVICE_FUNCTION +"&moodlewsrestformat=json&courseid=" + courseId + "&wstoken=" + Moodleclient.user.getToken();
+            
+        URL url = new URL(url_str);
+            
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+        con.setRequestMethod("GET");
+        con.connect();
+            
+        int status = con.getResponseCode();
+        
+        JSONArray jarr;
+            
+        if(status == 200){
+            //the server is reachable
+            //get the request response
+            String res = "";
+
+            Scanner sc = new Scanner(url.openStream());
+
+            while(sc.hasNext()){
+                res += sc.nextLine();
+            }
+            
+            JSONParser parse = new JSONParser();
+            
+            jarr = (JSONArray) parse.parse(res);
+                
+        }else{
+            //the server is not reachable
+            //***************************
+            throw new ServerUnreachableException("Server unreachable");
+        }
+        
+        return jarr;
     }
     
     //function to get the list of the courses of a given student
@@ -89,46 +135,6 @@ public class CoursesHelper {
             JSONObject jobj = (JSONObject) parse.parse(res);
             
             jarr = (JSONArray) parse.parse(jobj.get("courses").toString());
-                
-        }else{
-            //the server is not reachable
-            //***************************
-            throw new ServerUnreachableException("Server unreachable");
-        }
-        
-        return jarr;
-    }
-    
-    //function to get the informations of a given course
-    public JSONArray pullCourse(String courseId) throws MalformedURLException, IOException, ServerUnreachableException, ParseException{
-   
-        String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + this.GET_COURSE_INFORMATION_SERVICE_FUNCTION + "&moodlewsrestformat=json&wsfunction=" + this.GET_COURSE_CONTENTS_SERVICE_FUNCTION +"&moodlewsrestformat=json&courseid=" + courseId + "&wstoken=" + Moodleclient.user.getToken();
-            
-        URL url = new URL(url_str);
-            
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            
-        con.setRequestMethod("GET");
-        con.connect();
-            
-        int status = con.getResponseCode();
-        
-        JSONArray jarr;
-            
-        if(status == 200){
-            //the server is reachable
-            //get the request response
-            String res = "";
-
-            Scanner sc = new Scanner(url.openStream());
-
-            while(sc.hasNext()){
-                res += sc.nextLine();
-            }
-            
-            JSONParser parse = new JSONParser();
-            
-            jarr = (JSONArray) parse.parse(res);
                 
         }else{
             //the server is not reachable
@@ -187,6 +193,8 @@ public class CoursesHelper {
         
         for(int i = 0; i < coursesjarr.size(); i++){
             
+            JSONObject assignmentCompletionData = new JSONObject(); //Permettra de savoir si tel devoir a été remis ou pas. clé = remoteId du devoir. valeur = 1 (remis) ou 0 (non remis)
+            
             Moodleclient.session.beginTransaction();
         
             //save the course
@@ -200,7 +208,7 @@ public class CoursesHelper {
             JSONArray courseData = this.pullCourse(jobj.get("id").toString());
             
             //save the sections of the course
-            for(int j = 1; j < courseData.size(); j++){
+            for(int j = 0; j < courseData.size(); j++){
                 
                 JSONObject jsection = (JSONObject) courseData.get(j);
                 
@@ -216,15 +224,19 @@ public class CoursesHelper {
                 for(int k = 0; k < modulesArr.size(); k++){
                     
                     JSONObject jmodule = (JSONObject) modulesArr.get(k);
-                                        
-                    // Ajoutons une petite condition
+                    
                     // On verifie s'il s'agit d'un assignment
                     if(jmodule.get("modname").equals("assign")){
-                        // ceci est un assignment, on saute cette iteration de la boucle
-                        continue;
+                        Object remoteId = jmodule.get("instance"); //Le remoteId du devoir
+                        Object completionState = ((JSONObject) jmodule.get("completiondata")).get("state"); //état: 1 (remis) ou 0 (non remis)
+                        
+                        assignmentCompletionData.put(remoteId, completionState);
                     }
                     
-                    // il n'y a pas l'attribut "contents" pour les assignements
+                    // il n'y a pas l'attribut "contents" pour les assignements et d'autres modules. Dans ce cas, on passe à l'itération suivante.
+                    if(jmodule.get("contents")==null) continue;
+                    
+                    
                     JSONArray contentsArr = (JSONArray) parse.parse(jmodule.get("contents").toString());
                     
                     for(int l = 0; l < contentsArr.size(); l++){
@@ -267,8 +279,10 @@ public class CoursesHelper {
             for(Object obj: coursesWithAssigmentsJarr){
                 
                 JSONObject tmpCourse = (JSONObject) obj;
+                //System.out.println("**********="  + ": " + tmpCourse.toString());                //DJOUMESSI
                 
                 if(tmpCourse.get("id").toString().equalsIgnoreCase(jobj.get("id").toString())){
+
                     //ici
                     assignments = (JSONArray) parser.parse(tmpCourse.get("assignments").toString());
                     
@@ -282,7 +296,7 @@ public class CoursesHelper {
             
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
             
-            saveAssignments(assignments, cours);
+            saveAssignments(assignments, cours, assignmentCompletionData);
         
         }
         
@@ -295,56 +309,83 @@ public class CoursesHelper {
     }
     
     //function to save the assignements of a course
-    public void saveAssignments(JSONArray ass_jarr, Cours cours) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
-                    
+    public void saveAssignments(JSONArray ass_jarr, Cours cours, JSONObject ass_completion_data) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
+
+        /* Récupérons les notes des devoirs de ce cours */
+        JSONObject notes = this.getCourseGrades(cours); System.out.println(notes);
+                
         for(int m = 0; m < ass_jarr.size(); m++){
             
-            System.out.println("Valeur ass_jarr :" + ass_jarr);
+            //System.out.println("Valeur ass_jarr :" + ass_jarr);
 
             JSONObject str = (JSONObject) ass_jarr.get(m);
 
             String name = str.get("name").toString();
-            String etat = "";
+            String remoteId = str.get("id").toString();
             
-            if(str.get("nosubmissions").toString().equalsIgnoreCase("0")){
+            String etat = "due";
+            try{
+                etat = ass_completion_data.get(str.get("id")).toString().equalsIgnoreCase("0") ? "due" : "submitted";
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+            
+            /*if(str.get("nosubmissions").toString().equalsIgnoreCase("0")){ //Ceci ne marche pas. c'est toujours égal à 0, que le devoir ait été remis ou non
                 etat = "submitted";
             }else{
                 etat = "due";
-            }
+            }*/
 
             if(str.containsKey("introattachments")){
 
                 JSONArray int_att_arr = (JSONArray) str.get("introattachments");
+                
+                Timestamp ts = new Timestamp((long)str.get("duedate")*1000); 
+                Date due_date = new Date(ts.getTime());
+                Devoirs devoirs = new Devoirs(cours, name, due_date, etat, remoteId, new Date(), new Date(), new HashSet(), new HashSet());
+                //Mise à jour de la note
+                try{
+                    List notesList = (ArrayList) notes.get(str.get("id"));
+                    if(notesList.get(0)!= null) devoirs.setNote(Integer.valueOf(notesList.get(0).toString()));
+                    if(notesList.get(1)!= null) devoirs.setNoteMax(Integer.valueOf(notesList.get(1).toString()));
+                }catch(NullPointerException e){
+                    System.out.println("Erreur lors de l'accès à la note du devoir de remoteId" + remoteId);
+                }
+                
+                Moodleclient.session.beginTransaction();
+                Moodleclient.session.save(devoirs);
+                Moodleclient.session.getTransaction().commit();
 
                 for(int n = 0; n < int_att_arr.size(); n++){
 
                     JSONObject int_att_obj = (JSONObject) int_att_arr.get(n);
 
                     String file_name = int_att_obj.get("filename").toString();
+                    String hash_name = (new Date()).getTime() + "_" + file_name;
                     String file_url =  int_att_obj.get("fileurl").toString() + "?token=" + Moodleclient.user.getToken();
 
-                    Timestamp ts = new Timestamp((long)str.get("duedate")*1000); 
+                    //Timestamp ts = new Timestamp((long)str.get("duedate")*1000); 
 
-                    Date due_date = new Date(ts.getTime());
+                    //Date due_date = new Date(ts.getTime());
                     
-                    Devoirs devoirs = new Devoirs(cours, name, due_date, etat, str.get("id").toString(), new Date(), new Date(), new HashSet(), new HashSet());
+                    //Devoirs devoirs = new Devoirs(cours, name, due_date, etat, str.get("id").toString(), new Date(), new Date(), new HashSet(), new HashSet());
                     
                     if(!file_url.isEmpty()){
 
-                        RessourceDevoir res_dev = new RessourceDevoir(devoirs, file_name, file_name, new Date(), new Date());
+                        RessourceDevoir res_dev = new RessourceDevoir(devoirs, file_name, hash_name, new Date(), new Date());
                         
                         Moodleclient.session.beginTransaction();
                         
-                        Moodleclient.session.save(devoirs);
+                        //Moodleclient.session.save(devoirs);
                         Moodleclient.session.save(res_dev);
                         
                         Moodleclient.session.getTransaction().commit();
                         
-                        Moodleclient.session.close();
+                        //Moodleclient.session.close();
                         
-                        Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+                        //Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
                         
-                        Moodleclient.assignments = Moodleclient.session.createQuery("from Devoirs").list();
+                        //Moodleclient.assignments = Moodleclient.session.createQuery("from Devoirs").list();
                         
                         URL f_url = new URL(file_url);
 
@@ -362,7 +403,7 @@ public class CoursesHelper {
                             InputStream in = f_url.openStream();
 
                             BufferedInputStream bis = new BufferedInputStream(in);
-                            FileOutputStream fos = new FileOutputStream("./files/" + file_name);
+                            FileOutputStream fos = new FileOutputStream("./files/" + hash_name);
 
                             byte[] data = new byte[1024];
                             int count;
@@ -378,7 +419,223 @@ public class CoursesHelper {
                         }
                     }
                 }
+                
+                Moodleclient.session.close();
+                        
+                Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+                        
+                Moodleclient.assignments = Moodleclient.session.createQuery("from Devoirs").list();
+                
+                System.out.println("\nWE ARE TRIYING TO PULL ASSIGNMENT SUBMISSIONS\n");
+                //Recherche et pull des soumissions de devoirs correspondant au devoir actuel
+                this.pullAssignmentSubmissions(devoirs);
+                        
             }
+            
         }
     }
+    
+    
+        //Récupère les notes obtenues aux devoirs d'une matière
+        public JSONObject getCourseGrades(Cours cours) throws MalformedURLException, IOException, ParseException, ServerUnreachableException{
+            JSONObject result = new JSONObject();
+            
+            String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + CoursesHelper.GET_GRADES_SERVICE_FUNCTION+ "&moodlewsrestformat=json&courseid=" + cours.getRemoteId() + "&userid=" + Moodleclient.user.getRemoteId() + "&wstoken=" + Moodleclient.PRIVILEGED_TOKEN;
+            System.out.println("url_str : "+url_str);
+        URL url = new URL(url_str);
+            
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+        con.setRequestMethod("GET");
+        con.connect();
+            
+        int status = con.getResponseCode();
+                    
+        if(status == 200){
+            //the server is reachable
+            //get the request response
+            String res = "";
+
+            Scanner sc = new Scanner(url.openStream());
+
+            while(sc.hasNext()){
+                res += sc.nextLine();
+            }
+            
+            JSONParser parse = new JSONParser();
+            
+            JSONObject gradeObj = (JSONObject) parse.parse(res);
+            System.out.println("res : "+gradeObj);
+            JSONArray gradeArr = (JSONArray) gradeObj.get("usergrades");
+            
+            JSONObject tempObj; JSONArray tempArr;
+            
+            if(gradeArr != null ){
+                for(int i=0; i<gradeArr.size(); i++){
+                    tempObj = (JSONObject) gradeArr.get(i);
+                    tempArr = (JSONArray) tempObj.get("gradeitems");
+
+                    for(int j=0; j<tempArr.size(); j++){
+                        JSONObject obj = (JSONObject) tempArr.get(j); System.out.println("obj"+obj);
+
+                        if(obj.get("itemmodule") != null && obj.get("itemmodule").toString().equalsIgnoreCase("assign")){
+                            List<Object> notes = new ArrayList<Object>();
+                            notes.add(obj.get("graderaw"));
+                            notes.add(obj.get("grademax"));
+
+                            result.put(obj.get("iteminstance"), notes);
+                        }
+
+                    }
+
+                }
+            }
+                  
+        }else{
+            //the server is not reachable
+            //***************************
+            throw new ServerUnreachableException("Server unreachable");
+        }
+        
+            return result;
+        }
+    
+    
+        public void pullAssignmentSubmissions(Devoirs dev) throws MalformedURLException, IOException, ServerUnreachableException, ParseException{
+        
+        JSONArray jarr, jarrSubm, jarrPlugins, jarrFileAreas, jarrSubmFinal;
+        String remoteId = String.valueOf(Moodleclient.user.getRemoteId());
+        
+        String url_str = Moodleclient.serverAddress + "webservice/rest/server.php?wsfunction=" + this.GET_SUBMISSIONS_SERVICE_FUNCTION + "&assignmentids[]=" + dev.getRemoteId() + "&wstoken=" + Moodleclient.PRIVILEGED_TOKEN + "&moodlewsrestformat=json";
+        System.out.println(url_str);
+            
+        URL url = new URL(url_str);
+            
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.connect();
+        
+        int status = con.getResponseCode();
+            
+        if(status == 200){
+            Moodleclient.session.beginTransaction();
+            //the server is reachable
+            //get the request response
+            String res = "";
+
+            Scanner sc = new Scanner(url.openStream());
+
+            while(sc.hasNext()){
+                res += sc.nextLine();
+            }
+
+            JSONParser parse = new JSONParser();
+            JSONObject jobj = (JSONObject) parse.parse(res);
+            
+            try{
+                jarr = (JSONArray) parse.parse(jobj.get("assignments").toString());
+            }
+            catch(NullPointerException e){ //L'objet n'a pas d'attribut assignments
+                System.out.println("***Vous n'avez pas le droit d'accéder à ces données.***\nRésultat de la requête: "+jobj);
+                Moodleclient.session.getTransaction().commit();
+                return;
+            }
+            
+            
+            for(int i=0; i<jarr.size(); i++){
+                JSONObject obj1 = (JSONObject) jarr.get(i);
+                System.out.println("obj1 : "+obj1+", remoteId : "+dev.getRemoteId());
+                if(obj1.get("assignmentid").toString().equals(dev.getRemoteId())){
+                    jarrSubm = (JSONArray) parse.parse(obj1.get("submissions").toString()); //Tableau des soumissions (tous étudiants confondus)
+                    
+                    for(int j=0; j<jarrSubm.size(); j++){
+                    JSONObject obj2 = (JSONObject) jarrSubm.get(j);
+                    System.out.println(" userid : "+obj2.get("userid").toString());
+                
+                        if(Moodleclient.isStudent == 1 && obj2.get("userid").toString().equals(remoteId)){ //S'il s'agit d'une soumission de l'utilisateur actuel
+                            jarrPlugins = (JSONArray) parse.parse(obj2.get("plugins").toString());
+                            
+                            JSONObject obj3 = (JSONObject) jarrPlugins.get(0); //jarrPlugins est un array à un seul élément
+                            jarrFileAreas = (JSONArray) parse.parse(obj3.get("fileareas").toString());
+                            
+                            JSONObject obj4 = (JSONObject) jarrFileAreas.get(0); //jarrFileAreas est un array à un seul élément
+                            jarrSubmFinal = (JSONArray) parse.parse(obj4.get("files").toString()); //Tableau des soumissions de l'utilisateur actuel
+                            
+                            //On peut passer au pull de ces soumissions
+                            
+                            for(int k=0; k<jarrSubmFinal.size(); k++){
+                                JSONObject obj5 = (JSONObject) jarrSubmFinal.get(k); System.out.println(obj5);
+                                
+                                String fileName = obj5.get("filename").toString();
+                                String hashName = (new Date()).getTime() + "_" + fileName;
+                                String fileUrl = obj5.get("fileurl").toString() + "?token=" + Moodleclient.PRIVILEGED_TOKEN;
+                                byte b = 1;
+                                
+                                System.out.println("pull assignment submition");
+                                //1. On enregistre la soumission en BD
+                                AssignmentSubmission ass = new AssignmentSubmission(dev, fileName, hashName, new Date(), new Date(), b);
+                                Moodleclient.session.save(ass);
+                                
+                                //2. On télécharge le fichier correspondant
+                                Downloader.downloadFile(fileUrl, hashName);
+                            }
+                        }
+                        else if(Moodleclient.isStudent == 0){ // si l'utilisateur connecté est un prof
+                            jarrPlugins = (JSONArray) parse.parse(obj2.get("plugins").toString());
+                            
+                            JSONObject obj3 = (JSONObject) jarrPlugins.get(0); //jarrPlugins est un array à un seul élément
+                            jarrFileAreas = (JSONArray) parse.parse(obj3.get("fileareas").toString());
+                            
+                            JSONObject obj4 = (JSONObject) jarrFileAreas.get(0); //jarrFileAreas est un array à un seul élément
+                            jarrSubmFinal = (JSONArray) parse.parse(obj4.get("files").toString()); //Tableau des soumissions de l'utilisateur actuel
+                            
+                            //On peut passer au pull de ces soumissions
+                            
+                            for(int k=0; k<jarrSubmFinal.size(); k++){
+                                JSONObject obj5 = (JSONObject) jarrSubmFinal.get(k); System.out.println(obj5);
+                                
+                                String fileName = obj5.get("filename").toString();
+                                String hashName = (new Date()).getTime() + "_" + fileName;
+                                String fileUrl = obj5.get("fileurl").toString() + "?token=" + Moodleclient.PRIVILEGED_TOKEN;
+                                byte b = 1;
+                                
+                                System.out.println("pull assignment submition");
+                                //1. On enregistre la soumission en BD
+                                // on doit avoir le userid pour recuperer le nom et l'email de l'etudiant
+                                System.out.println("obj2 : "+obj2);
+                                String userId = obj2.get("userid").toString();
+                                String request2 = "curl \"" + Moodleclient.serverAddress + "webservice/rest/server.php?wstoken="+ Moodleclient.PRIVILEGED_TOKEN +"&wsfunction=core_user_get_users_by_field&field=id&values[]=" + userId + "&moodlewsrestformat=json\"";
+                                String response2 = new RequestCommand(request2).runCommand(); //Nouveau code
+                                // on affiche maintenant le resultat de la requette
+                                
+                                
+                                JSONArray jarr2 = (JSONArray) parse.parse(response2);
+
+                                JSONObject jobj2 = (JSONObject) jarr2.get(0);
+
+                                // on exploite le resultat
+                                String fullName = jobj2.get("fullname").toString();
+                                String email = jobj2.get("email").toString();
+                                
+                                AssignmentSubmission ass = new AssignmentSubmission(dev, fileName, hashName, new Date(), new Date(), b, fullName, email, null);
+                                Moodleclient.session.save(ass);
+                                
+                                //2. On télécharge le fichier correspondant
+                                Downloader.downloadFile(fileUrl, hashName);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Moodleclient.session.getTransaction().commit();
+        }else{
+            //the server is not reachable
+            //***************************
+            throw new ServerUnreachableException("Server unreachable");
+        }
+        
+    }
+ 
+    
 }

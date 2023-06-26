@@ -34,11 +34,13 @@ public class Dry {
        
         AnchorPane leftMenu =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/leftDashboard.fxml"));
         root.setLeft(leftMenu);
+        
         AnchorPane rightMenu =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/rightDashboard.fxml"));
         root.setRight(rightMenu);
         
-        AnchorPane content =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
-        root.setCenter(content);
+        //Le leftMenu se charge de mettre à jour le contenu central donc, plus besoin de ceci.
+        //AnchorPane content =  (AnchorPane)FXMLLoader.load(getClass().getResource("/SDashboard/StudentDashboard.fxml"));
+        //root.setCenter(content);
     }
 
 }

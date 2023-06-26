@@ -78,17 +78,19 @@ public class SPrivateFilesController_1 implements Initializable{
         
         List<File> files = fc.showOpenMultipleDialog(null);
         
-        for (int i = 0; i< files.size(); i++){
-            if (files != null){
+        if(files != null){
+            for (int i = 0; i< files.size(); i++){
+
                list.appendText(files.get(i).getAbsoluteFile()+ "\n");
                //filesList.getItems().add(files.get(i).getAbsolutePath());
                
                //append the file to the files List
                filesList.add(files.get(i));
                 
-            }else{
-                System.out.println("File is invalid!");
             }
+        }
+        else{
+            System.out.println("File is invalid!");
         }
             
     }
@@ -97,13 +99,19 @@ public class SPrivateFilesController_1 implements Initializable{
     public void saveFiles() throws IOException{
         
         Moodleclient.session.beginTransaction();
+
+        System.out.println("Entrée dans la fonction de sauvegarde de fichiers privés");
+
         
         for(Object obj: filesList){
             File file = (File)obj;
             
             String hashName = file.getName();
-            //System.out.println("Chemin du fichier : "+file.getAbsoluteFile());
-            CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \"./files/" + hashName + "\"");
+
+            //CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'"); //Code Linux
+            System.out.println("Commande: " + "copy \"" + file.getAbsoluteFile() + "\" \".\\files\\" + hashName + "\"");
+            CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \".\\files\\" + hashName + "\"");
+
             commandRunner.start();
             
             //save the file in the database
@@ -139,68 +147,76 @@ public class SPrivateFilesController_1 implements Initializable{
     
     //fonction to load and display the private files
     public void loadPrivateFiles(){
-        try {
 
-            GridPane filesGridPane = new GridPane();
+        if(moodleclient.Moodleclient.privateFiles.size() > 0){
 
-            for(int i = 0; i < moodleclient.Moodleclient.privateFiles.size(); i++){
+            try {
+                
+                GridPane filesGridPane = new GridPane();
+                
+                for(int i = 0; i < moodleclient.Moodleclient.privateFiles.size(); i++){
+                    
+                    PrivateFile privateFile = (PrivateFile)moodleclient.Moodleclient.privateFiles.get(i);
 
-                PrivateFile privateFile = (PrivateFile)moodleclient.Moodleclient.privateFiles.get(i);
+                    //create the component to display the file
+                    FXMLLoader fileLoader = new FXMLLoader(getClass().getResource("/SCourse/documentButton.fxml"));
+                    Pane fileButton = (Pane) fileLoader.load();
+                    
+                    Label fileName = (Label) fileLoader.getNamespace().get("fileName");
+                    
+                    fileName.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            FileLauncher fileLauncher = new FileLauncher(privateFile.getHashName());
+                            fileLauncher.start();
+                        }
+                    });
 
-                //create the component to display the file
-                FXMLLoader fileLoader = new FXMLLoader(getClass().getResource("/SCourse/documentButton.fxml"));
-                Pane fileButton = (Pane) fileLoader.load();
+                    fileName.setText(privateFile.getFileName());
+                    
+                    //set the delete button
+                    ImageView deleteImg = (ImageView) fileLoader.getNamespace().get("deleteBtn");
+                    
+                    deleteImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            //delete the current private file from the local storage
+                            System.out.println("Commande: " + "del \".\\files\\" + privateFile.getHashName() + "\"");
+                            //CommandRunner deleteCommand = new CommandRunner("rm \"./files/" + privateFile.getHashName() + "\""); //Commande Linux
+                            CommandRunner deleteCommand = new CommandRunner("del \".\\files\\" + privateFile.getHashName() + "\"");
+                            deleteCommand.start();
+                            
+                            //delete the instance from the database
+                            Moodleclient.session.beginTransaction();
+                            
+                            Moodleclient.session.delete(privateFile);
+                            
+                            Moodleclient.session.getTransaction().commit();
+                            
+                            
+                            Moodleclient.session.beginTransaction();
+                            
+                            Moodleclient.privateFiles = Moodleclient.session.createQuery("from PrivateFile").list();
+                            
+                            Moodleclient.session.getTransaction().commit();
+                            
+                            //update the private files list of the application
+                            loadPrivateFiles();
+                        }
+                    });
 
-                Label fileName = (Label) fileLoader.getNamespace().get("fileName");
+                    filesGridPane.add(fileButton, 0, i, 1, 1);
 
-                fileName.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        FileLauncher fileLauncher = new FileLauncher(privateFile.getHashName());
-                        fileLauncher.start();
-                    }
-                });
+                }   
 
-                fileName.setText(privateFile.getFileName());
+                this.scrollpane.setContent(filesGridPane);
 
-                //set the delete button
-                ImageView deleteImg = (ImageView) fileLoader.getNamespace().get("deleteBtn");
-
-                deleteImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        //delete the current private file from the local storage
-                        CommandRunner deleteCommand = new CommandRunner("del \".\\files\\" + privateFile.getHashName() + "\"");
-                        //CommandRunner deleteCommand = new CommandRunner("cd files && del \"" + privateFile.getHashName() + "\" && cd ../");
-                        deleteCommand.start();
-
-                        //delete the instance from the database
-                        Moodleclient.session.beginTransaction();
-
-                        Moodleclient.session.delete(privateFile);
-
-                        Moodleclient.session.getTransaction().commit();
-
-
-                        Moodleclient.session.beginTransaction();
-
-                        Moodleclient.privateFiles = Moodleclient.session.createQuery("from PrivateFile").list();
-
-                        Moodleclient.session.getTransaction().commit();
-
-                        //update the private files list of the application
-                        loadPrivateFiles();
-                    }
-                });
-
-                filesGridPane.add(fileButton, 0, i, 1, 1);
-
-            }   
-
-            this.scrollpane.setContent(filesGridPane);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else{ //Si la liste des fichiers privés est vide
+            this.scrollpane.setContent(new GridPane());
         }
 
     }

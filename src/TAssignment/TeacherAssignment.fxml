@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SAssignment.StudentAssignmentController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TAssignment.TeacherAssignmentController">
    <children>
       <Pane prefHeight="41.0" prefWidth="523.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0">
          <children>
-            <Label fx:id="topicName" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="513.0" style="-fx-background-color: FFFFFF;" text="Topic 2" textFill="#0a82c3">
+            <Label fx:id="topicName" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: FFFFFF;" text="Topic 2" textFill="#0a82c3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -24,7 +24,7 @@
                   <Insets left="20.0" right="5.0" />
                </padding>
             </Label>
-            <Label fx:id="devoirId" contentDisplay="CENTER" layoutX="501.0" layoutY="3.0" prefHeight="36.0" prefWidth="87.0" style="-fx-background-color: FFFFFF;" textFill="#0a82c3">
+            <Label fx:id="devoirId" contentDisplay="CENTER" layoutX="577.0" layoutY="3.0" prefHeight="36.0" prefWidth="11.0" style="-fx-background-color: FFFFFF;" textFill="#0a82c3">
                <font>
                   <Font size="24.0" />
                </font>
@@ -45,7 +45,7 @@
                               <Font size="20.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="10.0" left="4.0" />
+                              <Insets bottom="10.0" left="20.0" />
                            </VBox.margin>
                         </Label>
                         <GridPane fx:id="gridpane" maxWidth="1.7976931348623157E308">
@@ -56,12 +56,11 @@
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
                               <AnchorPane prefWidth="200.0" style="-fx-background-color: #F5F5F5;">
                                  <children>
-                                    <Label text="Submission status: ">
+                                    <Label text="Open date: ">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
@@ -70,7 +69,7 @@
                               </AnchorPane>
                               <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1">
                                  <children>
-                                    <Label fx:id="status" text="No attempt">
+                                    <Label fx:id="openDate" text="Sunday, 28 November 2021, 12:00 AM">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -95,16 +94,6 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <Label text="Grade:" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="gradeLabel" text="Grade:" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
                            </children>
                            <VBox.margin>
                               <Insets left="20.0" top="10.0" />
@@ -112,12 +101,20 @@
                         </GridPane>
                         <HBox alignment="CENTER">
                            <children>
-                              <JFXButton fx:id="btnAddSub" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#handleAddSubmission" prefHeight="37.0" prefWidth="162.0" style="-fx-background-color: #DCDCDC;" text="Add submission" textAlignment="CENTER">
+                              <JFXButton fx:id="viewAllSubmissions" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#handleAddSubmission" prefHeight="37.0" prefWidth="162.0" style="-fx-background-color: #DCDCDC;" text="View All Submissions" textAlignment="CENTER">
                                  <font>
                                     <Font size="13.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets top="25.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="grade" alignment="CENTER" contentDisplay="CENTER" layoutX="229.0" layoutY="35.0" onMouseClicked="#handleAddSubmission" prefHeight="37.0" prefWidth="103.0" style="-fx-background-color: #357EC7;" text="Grade" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="30.0" top="25.0" />
                                  </HBox.margin>
                               </JFXButton>
                            </children>

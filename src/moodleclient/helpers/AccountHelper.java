@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import moodleclient.Moodleclient;
 import static moodleclient.Moodleclient.session;
 import moodleclient.entity.Users;
 import moodleclient.exceptions.NotValidSessionException;
@@ -89,10 +90,11 @@ public class AccountHelper {
                 String url = serverAdd + "webservice/rest/server.php?wstoken="+user_token+"&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json"; // ajout de ma part pour recuperer le remoteid
                 remote_id = RemoteId.getRemoteId(url);
                 System.out.println("remote_id : "+ remote_id);
-                //
                 
                 result.put("token", user_token);
                 result.put("remoteid", remote_id);
+
+                System.out.println("Utilisateur récupéré: " + result.toString());
                 //result.put("remoteid", jobj.get("remoteid").toString());
                 
             }else{
@@ -110,7 +112,8 @@ public class AccountHelper {
     
     //function to save the user profile in the local database
     public Users saveAccount(String username, String password, String userToken, Byte isStudent, int remoteId){
-       
+        Moodleclient.isStudent = isStudent;
+        
         Session session = HibernateUtil.getSessionFactory().openSession();
         
         session.beginTransaction();

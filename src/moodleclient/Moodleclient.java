@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -28,6 +29,7 @@ import login.Dry;
 
 import moodleclient.entity.Users;
 import moodleclient.helpers.AccountHelper;
+import moodleclient.helpers.CurrentTab;
 import moodleclient.util.HibernateUtil;
 
 import org.hibernate.Session;
@@ -46,8 +48,14 @@ public class Moodleclient extends Application {
     public static Users user;
     public static String sessionId = "";
     public static String serverAddress;
+    public static String PRIVILEGED_TOKEN = "02471ec179ac040ab5755322a95fcfdd"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
+    public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
+    
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy , HH:mm");
     
     public static boolean autoSync;
+    
+    public static Byte isStudent;// isStudent = 0;
     
     public static List courses = new ArrayList();
     public static List privateFiles = new ArrayList();
@@ -100,6 +108,12 @@ public class Moodleclient extends Application {
             //get the list of assignments from the local database
             this.assignments = this.session.createQuery("from Devoirs").list();
             
+            // get the type of user
+            List isStudents = this.session.createQuery("from Users").list();
+            Users user = (Users) isStudents.get(0);
+            this.isStudent = user.getIsSudent();
+            System.out.println("\nIS Student : "+user.getIsSudent()+"\n"); // a retirer 
+            
             //load the fxml document to display the home of the application
             //**************************************************************
             Dry dry = new Dry();
@@ -108,6 +122,7 @@ public class Moodleclient extends Application {
         
         stage.setScene(scene);
         stage.setMinWidth(1000);
+        stage.setHeight(600);
         stage.show();
     }
 
@@ -207,9 +222,10 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            //processBuilder.command("bash", "-c", "rm ./files/*" + " &");
-            //on vide le contenu du dossier files
-            processBuilder.command("cmd.exe", "/c", " del /q .\\files\\*");
+            //processBuilder.command("bash", "-c", "rm ./files/*" + " &"); //On vide le dossier files //Commande Linux
+            //on supprime le dossier files et on le recree // processBuilder.command("cmd.exe", "/c", " rmdir /s /q files && mkdir files"); //Commande Windows
+            System.out.println("Commande: " + " del /s /q \".\\files\\*\"");
+            processBuilder.command("cmd.exe", "/c", " del /s /q \".\\files\\*\""); //On vide le dossier files //Commande Windows
 
             try{
                 Process process = processBuilder.start();
@@ -261,7 +277,10 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            processBuilder.command("cmd.exe", "/c", " \".\\files\\"+fileName+"\"");
+            //processBuilder.command("bash", "-c", "xdg-open ./files/'" + fileName + "' &"); //Commande Linux
+            //processBuilder.command("cmd.exe", "/c", " cd files && "+fileName+" && cd ../"); //Commande Windows
+            System.out.println("Commande: " + "\"" + ".\\files\\" + fileName + "\"");
+            processBuilder.command("cmd.exe", "/c", "\"" + ".\\files\\" + fileName + "\""); //Commande Windows
 
             try{
                 Process process = processBuilder.start();

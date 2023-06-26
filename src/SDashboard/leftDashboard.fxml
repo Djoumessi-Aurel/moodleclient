@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="193.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.LeftDashboardController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="400.0" prefWidth="193.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SDashboard.LeftDashboardController">
    <children>
       <ScrollPane layoutY="-6.0" maxHeight="1.7976931348623157E308" prefHeight="400.0" prefWidth="188.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -27,7 +27,7 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </VBox.margin>
                   </JFXButton>
                   <JFXButton fx:id="btnPrivateFiles" layoutX="10.0" layoutY="56.0" onAction="#handleButtonSPrivaFiles" prefHeight="46.0" prefWidth="171.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Private Files">
@@ -42,7 +42,7 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" />
+                        <Insets bottom="5.0" left="10.0" />
                      </VBox.margin>
                   </JFXButton>
                   <JFXButton fx:id="btnAssignments" onAction="#handleButtonSAssignment" prefHeight="46.0" prefWidth="172.0" style="-fx-border-color: D1D0CE;" styleClass="over" text="Assignments">
@@ -57,7 +57,7 @@
                         </ImageView>
                      </graphic>
                      <VBox.margin>
-                        <Insets left="5.0" />
+                        <Insets left="10.0" />
                      </VBox.margin>
                   </JFXButton>
                </children>

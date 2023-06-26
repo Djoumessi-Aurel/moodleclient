@@ -1,4 +1,5 @@
-package SAssignmentCard;
+package TAssignmentCard;
+
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -6,12 +7,12 @@ import javafx.scene.control.Label;
 public class AvailableAssignmentCardController {
 
     @FXML
-    private Label courseAssignmentName;
+    private Label courseName;
 
     @FXML
-    private Label assignmentDesc;
+    private Label courseFullName;
     
     @FXML
-    private Label assignmentStatus;
+    private Label courseShortName;
 
 }
