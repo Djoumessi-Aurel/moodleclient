@@ -38,7 +38,7 @@
                <children>
                   <VBox layoutY="52.0" prefHeight="348.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
                      <children>
-                        <Label text="Submission status" textFill="#101111">
+                        <Label text="Assignment details" textFill="#101111">
                            <font>
                               <Font size="20.0" />
                            </font>

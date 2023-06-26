@@ -245,7 +245,7 @@ public class CoursesHelper {
     public void saveAssignments(JSONArray ass_jarr, Cours cours, JSONObject ass_completion_data) throws ParseException, MalformedURLException, IOException, ServerUnreachableException{
 
         /* Récupérons les notes des devoirs de ce cours */
-        JSONObject notes = this.getCourseGrades(cours); System.out.println(notes);
+        JSONObject notes = this.getCourseGrades(cours); System.out.println("VOICI LES NOTES: \n" + notes);
                 
         for(int m = 0; m < ass_jarr.size(); m++){
             
@@ -327,7 +327,7 @@ public class CoursesHelper {
     }
     
     
-        //Récupère les notes obtenues aux devoirs d'une matière
+        //Récupère les notes obtenues par l'étudiant (utlisateur actuel) aux devoirs d'une matière
         public JSONObject getCourseGrades(Cours cours) throws MalformedURLException, IOException, ParseException, ServerUnreachableException{
             JSONObject result = new JSONObject();
             
@@ -436,22 +436,18 @@ public class CoursesHelper {
                             //On peut passer au pull de ces soumissions
                             
                             for(int k=0; k<jarrSubmFinal.size(); k++){
-                                JSONObject obj5 = (JSONObject) jarrSubmFinal.get(k); System.out.println(obj5);
+                                JSONObject obj5 = (JSONObject) jarrSubmFinal.get(k);
                                 
                                 String fileName = obj5.get("filename").toString();
                                 String hashName = (new Date()).getTime() + "_" + fileName;
                                 String fileUrl = obj5.get("fileurl").toString() + "?token=" + Moodleclient.PRIVILEGED_TOKEN;
                                 byte b = 1;
                                 
-                                System.out.println("pull assignment submition");
                                 //1. On enregistre la soumission en BD
                                 // on doit avoir le userid pour recuperer le nom et l'email de l'etudiant
-                                System.out.println("obj2 : "+obj2);
                                 String userId = obj2.get("userid").toString();
-                                String request2 = "curl \"" + Moodleclient.serverAddress + "webservice/rest/server.php?wstoken="+ Moodleclient.PRIVILEGED_TOKEN +"&wsfunction=core_user_get_users_by_field&field=id&values[]=" + userId + "&moodlewsrestformat=json\"";
-                                String response2 = new RequestCommand(request2).runCommand(); //Nouveau code
-                                // on affiche maintenant le resultat de la requette
-                                
+                                String request2 = Moodleclient.serverAddress + "webservice/rest/server.php?wstoken="+ Moodleclient.PRIVILEGED_TOKEN +"&wsfunction=core_user_get_users_by_field&field=id&values[]=" + userId + "&moodlewsrestformat=json";
+                                String response2 = RequestAPI.getAPIResult(request2);
                                 
                                 JSONArray jarr2 = (JSONArray) parse.parse(response2);
 

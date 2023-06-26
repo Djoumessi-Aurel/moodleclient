@@ -127,7 +127,6 @@ public class TCreateAssignment implements Initializable{
 
         System.out.println("Entrée dans la fonction de sauvegarde de fichiers (ressources) du devoir");
         
-        
         System.out.println("Enoncé du devoir : "+assignmentName.getText());
         
         //on créé le devoir puis on l'enregistre dans la BD
@@ -148,9 +147,7 @@ public class TCreateAssignment implements Initializable{
             
             //save the file in the database
             byte b = 0;
-            
-            //PrivateFile privateFile = new PrivateFile(file.getName(), hashName, new Date(), new Date(), b);
-            
+                        
             //RessourceDevoir ressourceDevoir = new RessourceDevoir(newdevoir, file.getName(), hashName, new Date(), new Date());
             
             //Moodleclient.session.save(ressourceDevoir);
@@ -158,15 +155,13 @@ public class TCreateAssignment implements Initializable{
 
         Moodleclient.session.getTransaction().commit();
         
-        //update the private files list of the application
-        Moodleclient.session.beginTransaction();
+        //update the assignment list of the application
+       /* Moodleclient.session.beginTransaction();
         
-        moodleclient.Moodleclient.privateFiles = Moodleclient.session.createQuery("from PrivateFile").list();
+        moodleclient.Moodleclient.assignments = Moodleclient.session.createQuery("from Devoirs").list();
         
-        Moodleclient.session.getTransaction().commit();
-        
-        //loadPrivateFiles();
-        
+        Moodleclient.session.getTransaction().commit();*/
+                
         //clear the list of files
         cancel();
     }
@@ -178,81 +173,5 @@ public class TCreateAssignment implements Initializable{
         
         list.setText("");
     }
-    
-    //fonction to load and display the private files
-//    public void loadPrivateFiles(){
-//
-//        if(moodleclient.Moodleclient.privateFiles.size() > 0){
-//
-//            try {
-//                
-//                GridPane filesGridPane = new GridPane();
-//                
-//                for(int i = 0; i < moodleclient.Moodleclient.privateFiles.size(); i++){
-//                    
-//                    PrivateFile privateFile = (PrivateFile)moodleclient.Moodleclient.privateFiles.get(i);
-//
-//                    //create the component to display the file
-//                    FXMLLoader fileLoader = new FXMLLoader(getClass().getResource("/SCourse/documentButton.fxml"));
-//                    Pane fileButton = (Pane) fileLoader.load();
-//                    
-//                    Label fileName = (Label) fileLoader.getNamespace().get("fileName");
-//                    
-//                    fileName.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                        @Override
-//                        public void handle(MouseEvent event) {
-//                            FileLauncher fileLauncher = new FileLauncher(privateFile.getHashName());
-//                            fileLauncher.start();
-//                        }
-//                    });
-//
-//                    fileName.setText(privateFile.getFileName());
-//                    
-//                    //set the delete button
-//                    ImageView deleteImg = (ImageView) fileLoader.getNamespace().get("deleteBtn");
-//                    
-//                    deleteImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                        @Override
-//                        public void handle(MouseEvent event) {
-//                            //delete the current private file from the local storage
-//                            System.out.println("Commande: " + "del \".\\files\\" + privateFile.getHashName() + "\"");
-//                            //CommandRunner deleteCommand = new CommandRunner("rm \"./files/" + privateFile.getHashName() + "\""); //Commande Linux
-//                            CommandRunner deleteCommand = new CommandRunner("del \".\\files\\" + privateFile.getHashName() + "\"");
-//                            deleteCommand.start();
-//                            
-//                            //delete the instance from the database
-//                            Moodleclient.session.beginTransaction();
-//                            
-//                            Moodleclient.session.delete(privateFile);
-//                            
-//                            Moodleclient.session.getTransaction().commit();
-//                            
-//                            
-//                            Moodleclient.session.beginTransaction();
-//                            
-//                            Moodleclient.privateFiles = Moodleclient.session.createQuery("from PrivateFile").list();
-//                            
-//                            Moodleclient.session.getTransaction().commit();
-//                            
-//                            //update the private files list of the application
-//                            loadPrivateFiles();
-//                        }
-//                    });
-//
-//                    filesGridPane.add(fileButton, 0, i, 1, 1);
-//
-//                }   
-//
-//                this.scrollpane.setContent(filesGridPane);
-//
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//        else{ //Si la liste des fichiers privés est vide
-//            this.scrollpane.setContent(new GridPane());
-//        }
-//
-//    }
-
+ 
 }
