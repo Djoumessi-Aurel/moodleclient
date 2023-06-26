@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxWidth="1.7976931348623157E308" prefHeight="163.0" prefWidth="846.0" style="-fx-border-color: transparent transparent  D1D0CE transparent; -fx-border-style: solid; -fx-cursor: hand;" styleClass="my-btn-class" stylesheets="@../SCourseCard/courseCard.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TAssignmentOfCourseCard.TAssignmentOfCourseCardController">
+   <children>
+      <VBox prefHeight="163.0" prefWidth="784.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="846.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="96.0" prefWidth="754.0">
+                     <children>
+                        <Label fx:id="courseAssignmentName" prefHeight="25.0" prefWidth="738.0" text="Course Assignment 1" textFill="#27a0d0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons8_task_24px_1.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="assignmentDesc" text="Teacher: Prof 1" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="67.0" prefWidth="784.0">
+               <children>
+                  <Button fx:id="editAssignment" mnemonicParsing="false" prefHeight="36.0" prefWidth="90.0" style="-fx-background-color: #357EC7;" text="Edit" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="deleteAssignment" mnemonicParsing="false" prefHeight="36.0" prefWidth="104.0" style="-fx-background-color: #f11e0b;" text="Delete" textFill="WHITE" visible="false">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="viewAllSubmissions" mnemonicParsing="false" prefHeight="36.0" prefWidth="194.0" style="-fx-background-color: #357EC7;" text="View All Submissions" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</Pane>

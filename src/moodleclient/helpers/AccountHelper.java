@@ -94,6 +94,7 @@ public class AccountHelper {
                 result.put("remoteid", remote_id);
 
                 System.out.println("Utilisateur récupéré: " + result.toString());
+
                 //result.put("remoteid", jobj.get("remoteid").toString());
                 
             }else{

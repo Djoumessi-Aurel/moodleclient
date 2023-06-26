@@ -219,10 +219,9 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            //processBuilder.command("bash", "-c", "rm ./files/*" + " &"); //On vide le dossier files //Commande Linux
-            //on supprime le dossier files et on le recree // processBuilder.command("cmd.exe", "/c", " rmdir /s /q files && mkdir files"); //Commande Windows
-            System.out.println("Commande: " + " del /s /q \".\\files\\*\"");
-            processBuilder.command("cmd.exe", "/c", " del /s /q \".\\files\\*\""); //On vide le dossier files //Commande Windows
+            //processBuilder.command("bash", "-c", "rm ./files/*" + " &");
+            //on vide le contenu du dossier files
+            processBuilder.command("cmd.exe", "/c", " del /q .\\files\\*");
 
             try{
                 Process process = processBuilder.start();
@@ -274,10 +273,7 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            //processBuilder.command("bash", "-c", "xdg-open ./files/'" + fileName + "' &"); //Commande Linux
-            //processBuilder.command("cmd.exe", "/c", " cd files && "+fileName+" && cd ../"); //Commande Windows
-            System.out.println("Commande: " + "\"" + ".\\files\\" + fileName + "\"");
-            processBuilder.command("cmd.exe", "/c", "\"" + ".\\files\\" + fileName + "\""); //Commande Windows
+            processBuilder.command("cmd.exe", "/c", " \".\\files\\"+fileName+"\"");
 
             try{
                 Process process = processBuilder.start();

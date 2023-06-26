@@ -139,7 +139,7 @@ public class TopDashboardController implements Initializable {
         
         if(this.isSyncing){
            
-            //upload modifications of the private files //UPLOADER LES FICHIERS PRIVES
+            //upload modifications of the private files
             Moodleclient.session.beginTransaction();
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
@@ -150,23 +150,12 @@ public class TopDashboardController implements Initializable {
                 
                 PrivateFile privateFile = (PrivateFile) obj;
                 
-                //voyons le contenu de cet objet
-                /*petit test*/System.out.println("Contenu de l'objet obj : "+privateFile.getHashName());
-                
                 //build the url to update the file in the user's draft
-                //String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                //build the url to update the file in the user's draft
-                //Version Lening: //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
                 String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                /*petit test*/System.out.println(request);
-                
+
                 String requestResponse = new RequestCommand(request).runCommand();
-                
-                // Affichons un peu le resultat de cette commande
-                /*petit test*/System.out.println(requestResponse);
-                
+
                 //build the request to move the file to the private area of the user
                 JSONParser parser = new JSONParser();
                 
@@ -372,7 +361,7 @@ public class TopDashboardController implements Initializable {
     
     //function to update the application list of private files
     public void updatePrivateFilesList() throws IOException{
-                        
+
         Moodleclient.session.beginTransaction();
         
         Moodleclient.privateFiles =  Moodleclient.session.createQuery("from PrivateFile").list();

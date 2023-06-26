@@ -163,7 +163,6 @@ public class CoursesHelper {
                 
                 Sections section = new Sections(cours, jsection.get("name").toString(), new Date(), new Date(), Integer.valueOf(jsection.get("id").toString()), new HashSet(), (byte)1);
         
-
                 Moodleclient.session.save(section);
                 
                 //get the ressources of the section
@@ -184,7 +183,6 @@ public class CoursesHelper {
                     
                     // il n'y a pas l'attribut "contents" pour les assignements et d'autres modules. Dans ce cas, on passe à l'itération suivante.
                     if(jmodule.get("contents")==null) continue;
-                    
                     
                     JSONArray contentsArr = (JSONArray) parse.parse(jmodule.get("contents").toString());
                     
@@ -399,7 +397,7 @@ public class CoursesHelper {
                     for(int j=0; j<jarrSubm.size(); j++){
                     JSONObject obj2 = (JSONObject) jarrSubm.get(j);
                 
-                        if(obj2.get("userid").toString().equals(remoteId)){ //S'il s'agit d'une soumission de l'utilisateur actuel
+                        if(Moodleclient.user.isStudent() && obj2.get("userid").toString().equals(remoteId)){ //S'il s'agit d'une soumission de l'utilisateur actuel et s'il est étudiant
                             jarrPlugins = (JSONArray) parse.parse(obj2.get("plugins").toString());
                             
                             JSONObject obj3 = (JSONObject) jarrPlugins.get(0); //jarrPlugins est un array à un seul élément
@@ -420,6 +418,50 @@ public class CoursesHelper {
                                 
                                 //1. On enregistre la soumission en BD
                                 AssignmentSubmission ass = new AssignmentSubmission(dev, fileName, hashName, new Date(), new Date(), b);
+                                Moodleclient.session.save(ass);
+                                
+                                //2. On télécharge le fichier correspondant
+                                Downloader.downloadFile(fileUrl, hashName);
+                            }
+                        }
+                        else if(!Moodleclient.user.isStudent()){ // si l'utilisateur connecté est un prof
+                            jarrPlugins = (JSONArray) parse.parse(obj2.get("plugins").toString());
+                            
+                            JSONObject obj3 = (JSONObject) jarrPlugins.get(0); //jarrPlugins est un array à un seul élément
+                            jarrFileAreas = (JSONArray) parse.parse(obj3.get("fileareas").toString());
+                            
+                            JSONObject obj4 = (JSONObject) jarrFileAreas.get(0); //jarrFileAreas est un array à un seul élément
+                            jarrSubmFinal = (JSONArray) parse.parse(obj4.get("files").toString()); //Tableau des soumissions de l'utilisateur actuel
+                            
+                            //On peut passer au pull de ces soumissions
+                            
+                            for(int k=0; k<jarrSubmFinal.size(); k++){
+                                JSONObject obj5 = (JSONObject) jarrSubmFinal.get(k); System.out.println(obj5);
+                                
+                                String fileName = obj5.get("filename").toString();
+                                String hashName = (new Date()).getTime() + "_" + fileName;
+                                String fileUrl = obj5.get("fileurl").toString() + "?token=" + Moodleclient.PRIVILEGED_TOKEN;
+                                byte b = 1;
+                                
+                                System.out.println("pull assignment submition");
+                                //1. On enregistre la soumission en BD
+                                // on doit avoir le userid pour recuperer le nom et l'email de l'etudiant
+                                System.out.println("obj2 : "+obj2);
+                                String userId = obj2.get("userid").toString();
+                                String request2 = "curl \"" + Moodleclient.serverAddress + "webservice/rest/server.php?wstoken="+ Moodleclient.PRIVILEGED_TOKEN +"&wsfunction=core_user_get_users_by_field&field=id&values[]=" + userId + "&moodlewsrestformat=json\"";
+                                String response2 = new RequestCommand(request2).runCommand(); //Nouveau code
+                                // on affiche maintenant le resultat de la requette
+                                
+                                
+                                JSONArray jarr2 = (JSONArray) parse.parse(response2);
+
+                                JSONObject jobj2 = (JSONObject) jarr2.get(0);
+
+                                // on exploite le resultat
+                                String fullName = jobj2.get("fullname").toString();
+                                String email = jobj2.get("email").toString();
+                                
+                                AssignmentSubmission ass = new AssignmentSubmission(dev, fileName, hashName, new Date(), new Date(), b, fullName, email, null);
                                 Moodleclient.session.save(ass);
                                 
                                 //2. On télécharge le fichier correspondant
