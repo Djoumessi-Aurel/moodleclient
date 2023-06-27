@@ -25,7 +25,7 @@ import moodleclient.entity.Devoirs;
  */
 public class GradeAssignment {
     
-    public static void grading(Label grade, int subId){
+    public static void grading(Label grade, AssignmentSubmission sub){
         
         //Parent parent = FXMLLoader.load(getClass().getResource("./logoutAB.fxml"));
        
@@ -55,7 +55,7 @@ public class GradeAssignment {
         Label label = new Label("Insert grade here : ");
         label.setFont(new Font("Arial",16));
         
-        Label label1 = new Label(" / 100");
+        Label label1 = new Label(" / " + sub.getGradeMax());
         label1.setFont(new Font("Arial",16));
         
         JFXButton yesBtn = new JFXButton("Yes");
@@ -73,6 +73,8 @@ public class GradeAssignment {
         
         TextField input = new TextField();
         input.setPrefSize(150, 25);
+        
+        if(sub.getGrade() != null) input.setText(sub.getGrade().toString());
         
         
         hb1.getChildren().addAll(label, input, label1);
@@ -93,14 +95,13 @@ public class GradeAssignment {
                         valeur = 100;
                     }
                     grade.setText(""+valeur);
-                    // on modifie la note du devoir dans la BD
-                    List submissions =  Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.id='"+subId+"'").list();
-                    AssignmentSubmission submission = (AssignmentSubmission) submissions.get(0);
-                    submission.setGrade(valeur);
+                    // on modifie la note du devoir
+                    sub.setGrade(valeur);
+                    sub.setSynced((byte)0);
                     
                     // on met a jour la BD 
                     Moodleclient.session.beginTransaction();
-                    Moodleclient.session.createQuery("update AssignmentSubmission set grade='"+valeur+"' where id="+subId).executeUpdate();
+                    Moodleclient.session.save(sub);
                     Moodleclient.session.getTransaction().commit();
                     
                 }catch(Exception ex){

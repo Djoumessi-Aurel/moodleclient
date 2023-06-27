@@ -20,6 +20,7 @@ public class AssignmentSubmission  implements java.io.Serializable {
      private String fullName;
      private String email;
      private Double grade;
+     private Double gradeMax;
 
     public AssignmentSubmission() {
     }
@@ -37,7 +38,8 @@ public class AssignmentSubmission  implements java.io.Serializable {
        this.synced = synced;
     }
     
-    public AssignmentSubmission(Devoirs devoirs, String fileName, String hashName, Date createdAt, Date updatedAt, Byte synced, String fullName, String email, Double grade) {
+    public AssignmentSubmission(Devoirs devoirs, String fileName, String hashName, Date createdAt, Date updatedAt, Byte synced,
+            String fullName, String email, Double grade, Double gradeMax) {
        this.devoirs = devoirs;
        this.fileName = fileName;
        this.hashName = hashName;
@@ -47,6 +49,7 @@ public class AssignmentSubmission  implements java.io.Serializable {
        this.fullName = fullName;
        this.email = email;
        this.grade = grade;
+       this.gradeMax = gradeMax;
     }
    
     public Integer getId() {
@@ -122,7 +125,14 @@ public class AssignmentSubmission  implements java.io.Serializable {
     public void setGrade(Double grade) {
         this.grade = grade;
     }
-
+    
+    public Double getGradeMax() {
+        return this.gradeMax;
+    }
+    
+    public void setGradeMax(Double gradeMax) {
+        this.gradeMax = gradeMax;
+    }
 
 }
 

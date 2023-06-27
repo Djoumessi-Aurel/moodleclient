@@ -35,5 +35,8 @@
         <property name="grade" type="java.lang.Double">
             <column name="grade" />
         </property>
+        <property name="gradeMax" type="java.lang.Double">
+            <column name="gradeMax" />
+        </property>
     </class>
 </hibernate-mapping>

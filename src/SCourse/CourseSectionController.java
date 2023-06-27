@@ -46,7 +46,7 @@ public class CourseSectionController implements Initializable {
     
     @FXML
     public void handleGererRessources() throws IOException{
-        System.out.println("Vous avez cliqué sur " + Moodleclient.user);
+        //System.out.println("Vous avez cliqué sur " + Moodleclient.user);
         FXMLLoader courseFilesLoader = new FXMLLoader(getClass().getResource("/SCourse/ManageCourseFiles.fxml"));
         
         AnchorPane content = courseFilesLoader.load();

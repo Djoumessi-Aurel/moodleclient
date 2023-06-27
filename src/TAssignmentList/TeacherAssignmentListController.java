@@ -402,7 +402,7 @@ public class TeacherAssignmentListController implements Initializable{
                                                                 try {
                                                                     // on note le devoir
                                                                     System.out.println("vous avec cliqué sur grade :)");
-                                                                    GradeAssignment.grading(finalGrade, ass.getId());
+                                                                    GradeAssignment.grading(finalGrade, ass);
                                                                 }catch(Exception ex){
                                                                     System.out.println(ex.getMessage());
                                                                 }

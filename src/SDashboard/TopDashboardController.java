@@ -144,7 +144,6 @@ public class TopDashboardController implements Initializable {
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
             
-            /*petit test*/System.out.print("La taille de la liste est : "+privateFiles.size()+"\n");
             
             for(Object obj: privateFiles){
                 
@@ -447,6 +446,8 @@ public class TopDashboardController implements Initializable {
             } catch (IOException ex) {
                 
                 ex.printStackTrace();
+                System.out.println("UN PROBLEME EST SURVENU LORS DE LA SYNCHRONISATION. IL SE POURRAIT QUE LE SERVEUR SOIT INGNOIGNABLE."
+                        + "\nBIEN VOULOIR STOPER LA SYNCHORINISATION ET REESSAYER PLUS TARD (S'assurer que le bouton de connectivité est VERT)");
             }
         }
     }
