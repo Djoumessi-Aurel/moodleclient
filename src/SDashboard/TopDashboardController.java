@@ -23,6 +23,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
@@ -335,7 +336,6 @@ public class TopDashboardController implements Initializable {
                         }
 
                     } catch (IOException ex) {
-
                         ex.printStackTrace();
                     }
                 }
@@ -395,9 +395,9 @@ public class TopDashboardController implements Initializable {
                 updateCoursesList();
                 System.out.println("THREAD COURSES AND ASSIGNMENTS TERMINE");
                 
-            } catch (IOException ex) {
-                
+            } catch (IOException ex) {                
                 ex.printStackTrace();
+                handleSyncError("CoursesLoader"); //On indique le thread à l'origine de l'exception
                 
             } catch (ParseException ex) {
                 
@@ -446,8 +446,7 @@ public class TopDashboardController implements Initializable {
             } catch (IOException ex) {
                 
                 ex.printStackTrace();
-                System.out.println("UN PROBLEME EST SURVENU LORS DE LA SYNCHRONISATION. IL SE POURRAIT QUE LE SERVEUR SOIT INGNOIGNABLE."
-                        + "\nBIEN VOULOIR STOPER LA SYNCHORINISATION ET REESSAYER PLUS TARD (S'assurer que le bouton de connectivité est VERT)");
+                handleSyncError("PrivateFilesLoader"); //On indique le thread à l'origine de l'exception
             }
         }
     }
@@ -483,6 +482,28 @@ public class TopDashboardController implements Initializable {
             this.syncBtn.setTooltip(toolTextSync);
             
             this.rt.stop();
+    }
+    
+    //Cette fonction est exécuteée lorsqu'une exception IOException survient lors de la synchronisation
+    //Cela arrive souvent lorsque le serveur est injoignable (bouton de connectivité au ROUGE)
+    public void handleSyncError(String threadName){
+        
+        Platform.runLater(() -> {
+            //GUI STUFF
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Sync error - " + threadName);
+            alert.setHeaderText("Something went wrong when synchronizing");
+            alert.setContentText("UN PROBLEME EST SURVENU LORS DE LA SYNCHRONISATION. IL SE POURRAIT QUE LE SERVEUR SOIT INGNOIGNABLE."
+                    + "\nBIEN VOULOIR REESSAYER PLUS TARD (S'assurer que le bouton de connectivité est VERT)");
+
+            alert.showAndWait();
+            
+            //La synchronisation a échoué, on reset les variables associées et on arrête l'animation
+            this.syncDone = 0;        
+            this.isSyncing = false;
+            this.stopSyncAnimation();
+        });
+        
     }
     
 }
