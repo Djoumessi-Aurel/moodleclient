@@ -120,6 +120,7 @@ public class Moodleclient extends Application {
         stage.setScene(scene);
         stage.setMinWidth(1080);
         stage.setHeight(650);
+        stage.setTitle("Moodle client");
         stage.show();
     }
 
