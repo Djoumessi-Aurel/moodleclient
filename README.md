@@ -1,5 +1,5 @@
-#Client desktop pour un serveur moodle.
-##Pour l'utilisation du logiciel, référez-vous au guide d'utilisation (Guide d'utilisation v2.1.pdf).
+# Client desktop pour un serveur moodle.
+### Pour l'utilisation du logiciel, référez-vous au guide d'utilisation (Guide d'utilisation v2.1.pdf).
 
 
 # Fonctionnalités
