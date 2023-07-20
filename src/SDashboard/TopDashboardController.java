@@ -23,6 +23,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
@@ -139,34 +140,22 @@ public class TopDashboardController implements Initializable {
         
         if(this.isSyncing){
            
-            //upload modifications of the private files //UPLOADER LES FICHIERS PRIVES
+            //upload modifications of the private files
             Moodleclient.session.beginTransaction();
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
             
-            /*petit test*/System.out.print("La taille de la liste est : "+privateFiles.size()+"\n");
             
             for(Object obj: privateFiles){
                 
                 PrivateFile privateFile = (PrivateFile) obj;
                 
-                //voyons le contenu de cet objet
-                /*petit test*/System.out.println("Contenu de l'objet obj : "+privateFile.getHashName());
-                
                 //build the url to update the file in the user's draft
-                //String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                //build the url to update the file in the user's draft
-                //Version Lening: //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
                 String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                /*petit test*/System.out.println(request);
-                
+
                 String requestResponse = new RequestCommand(request).runCommand();
-                
-                // Affichons un peu le resultat de cette commande
-                /*petit test*/System.out.println(requestResponse);
-                
+
                 //build the request to move the file to the private area of the user
                 JSONParser parser = new JSONParser();
                 
@@ -347,7 +336,6 @@ public class TopDashboardController implements Initializable {
                         }
 
                     } catch (IOException ex) {
-
                         ex.printStackTrace();
                     }
                 }
@@ -372,7 +360,7 @@ public class TopDashboardController implements Initializable {
     
     //function to update the application list of private files
     public void updatePrivateFilesList() throws IOException{
-                        
+
         Moodleclient.session.beginTransaction();
         
         Moodleclient.privateFiles =  Moodleclient.session.createQuery("from PrivateFile").list();
@@ -407,9 +395,9 @@ public class TopDashboardController implements Initializable {
                 updateCoursesList();
                 System.out.println("THREAD COURSES AND ASSIGNMENTS TERMINE");
                 
-            } catch (IOException ex) {
-                
+            } catch (IOException ex) {                
                 ex.printStackTrace();
+                handleSyncError("CoursesLoader"); //On indique le thread à l'origine de l'exception
                 
             } catch (ParseException ex) {
                 
@@ -458,6 +446,7 @@ public class TopDashboardController implements Initializable {
             } catch (IOException ex) {
                 
                 ex.printStackTrace();
+                handleSyncError("PrivateFilesLoader"); //On indique le thread à l'origine de l'exception
             }
         }
     }
@@ -493,6 +482,28 @@ public class TopDashboardController implements Initializable {
             this.syncBtn.setTooltip(toolTextSync);
             
             this.rt.stop();
+    }
+    
+    //Cette fonction est exécuteée lorsqu'une exception IOException survient lors de la synchronisation
+    //Cela arrive souvent lorsque le serveur est injoignable (bouton de connectivité au ROUGE)
+    public void handleSyncError(String threadName){
+        
+        Platform.runLater(() -> {
+            //GUI STUFF
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Sync error - " + threadName);
+            alert.setHeaderText("Something went wrong when synchronizing");
+            alert.setContentText("UN PROBLEME EST SURVENU LORS DE LA SYNCHRONISATION. IL SE POURRAIT QUE LE SERVEUR SOIT INGNOIGNABLE."
+                    + "\nBIEN VOULOIR REESSAYER PLUS TARD (S'assurer que le bouton de connectivité est VERT)");
+
+            alert.showAndWait();
+            
+            //La synchronisation a échoué, on reset les variables associées et on arrête l'animation
+            this.syncDone = 0;        
+            this.isSyncing = false;
+            this.stopSyncAnimation();
+        });
+        
     }
     
 }

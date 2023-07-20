@@ -129,7 +129,6 @@ public class LoginController implements Initializable {
                        }else{
                            b = 0;
                        }
-                       System.out.println("RemoteId : "+userData.get("remoteid"));
 
                        Moodleclient.user = accountHelper.saveAccount(username, MyEncryption.encrypt(password), userData.get("token"), b, Integer.valueOf((String)userData.get("remoteid")));
                        
@@ -183,21 +182,32 @@ public class LoginController implements Initializable {
     @FXML
     private void handleServerBtn(ActionEvent event) throws Exception {
         
-        String serverAddress = ServerSettingsAB.display();
+        int result = ServerSettingsAB.display();
+        if(result == 0) return; //Si on a cliqué sur Cancel ou fermé la fenêtre, on ne fait rien.
 
-        System.out.println("Adresse du serveur=" + serverAddress);
+        System.out.println("Adresse du serveur = " + ServerSettingsAB.serverAddress);
+        System.out.println("Privileged token = " + ServerSettingsAB.PRIVILEGED_TOKEN);        
         
-        if(serverAddress.isEmpty()){} //The user choose cancel so we do nothing
-        
-        else{
+        if(!ServerSettingsAB.serverAddress.isEmpty()){
             //take the old value of the server Address
             JSONObject jo = Moodleclient.loadConfiguraton();
             
             //Update the value of the server ...
-            jo.put("serverAddress", serverAddress);
+            jo.put("serverAddress", ServerSettingsAB.serverAddress);
 
             Moodleclient.saveConfiguration(jo);
         }
+        
+        if(!ServerSettingsAB.PRIVILEGED_TOKEN.isEmpty()){
+            //take the old value of the server Address
+            JSONObject jo = Moodleclient.loadConfiguraton();
+            
+            //Update the value of the server ...
+            jo.put("PRIVILEGED_TOKEN", ServerSettingsAB.PRIVILEGED_TOKEN);
+
+            Moodleclient.saveConfiguration(jo);
+        }
+        
     }
 
 }

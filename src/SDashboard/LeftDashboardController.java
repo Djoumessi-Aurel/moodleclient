@@ -71,7 +71,8 @@ public class LeftDashboardController implements Initializable {
                             break;
                         case ASSIGNMENTS:
                             selectButton(btnAssignments);
-                            content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml"));
+                            if(Moodleclient.user.isStudent()) content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml")); //Si étudiant
+                            else content = (AnchorPane)FXMLLoader.load(getClass().getResource("/TAssignmentList/TeacherAssignmentList_1.fxml")); //Si enseignant
                             break;
                     }
 
@@ -118,7 +119,7 @@ public class LeftDashboardController implements Initializable {
 
         AnchorPane content;
         if(Moodleclient.user.isStudent()) content = (AnchorPane)FXMLLoader.load(getClass().getResource("/SAssignmentList/StudentAssignmentList_1.fxml")); //Si étudiant
-        else content = null; //Si enseignant
+        else content = (AnchorPane)FXMLLoader.load(getClass().getResource("/TAssignmentList/TeacherAssignmentList_1.fxml")); //Si enseignant
 
         root.setCenter(content);
         

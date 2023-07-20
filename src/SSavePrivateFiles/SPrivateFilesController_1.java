@@ -42,7 +42,8 @@ public class SPrivateFilesController_1 implements Initializable{
     @FXML
     private JFXTextArea list;
 
-                final FileChooser fc = new FileChooser();
+    final FileChooser fc = new FileChooser();
+
     @FXML
     private JFXButton fileChooser;
     @FXML
@@ -85,13 +86,12 @@ public class SPrivateFilesController_1 implements Initializable{
                //filesList.getItems().add(files.get(i).getAbsolutePath());
                
                //append the file to the files List
-               filesList.add(files.get(i));
-                
+               filesList.add(files.get(i));                
             }
         }
         else{
-            System.out.println("File is invalid!");
-        }
+                System.out.println("File is invalid!");
+            }
             
     }
     
@@ -145,7 +145,7 @@ public class SPrivateFilesController_1 implements Initializable{
         list.setText("");
     }
     
-    //fonction to load and display the private files
+     //fonction to load and display the private files
     public void loadPrivateFiles(){
 
         if(moodleclient.Moodleclient.privateFiles.size() > 0){

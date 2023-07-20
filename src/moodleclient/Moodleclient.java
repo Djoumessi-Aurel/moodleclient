@@ -50,7 +50,7 @@ public class Moodleclient extends Application {
     public static Users user;
     public static String sessionId = "";
     public static String serverAddress;
-    public static String PRIVILEGED_TOKEN = "c1b2822bd4e1187c62fd43aa765cd895"; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs
+    public static String PRIVILEGED_TOKEN; //Permet d'effectuer des opérations telles que: récupérer les soumissions de devoirs, les notes, les infos d'un utilisateur
     public static CurrentTab CURRENT_TAB = CurrentTab.DASHBOARD; //Représente l'onglet courant (Dashboard, Private Files ou Assignment).
     
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy , HH:mm");
@@ -120,6 +120,7 @@ public class Moodleclient extends Application {
         stage.setScene(scene);
         stage.setMinWidth(1080);
         stage.setHeight(650);
+        stage.setTitle("Moodle client");
         stage.show();
     }
 
@@ -152,8 +153,6 @@ public class Moodleclient extends Application {
     //function to save the configuration in the configuration file
     public static void saveConfiguration(JSONObject jo) throws FileNotFoundException, IOException, ParseException{
         
-        
-        
         PrintWriter pw = new PrintWriter("./etc/moodleclientconf.json");
         pw.write(jo.toString());
         
@@ -175,16 +174,18 @@ public class Moodleclient extends Application {
             
             serverAddress = jo.get("serverAddress").toString();
             
+            if(jo.get("autoSync").toString().equalsIgnoreCase("true")){
+                autoSync = true;
+
+            }else{
+                autoSync = false;
+            }
+            
+            PRIVILEGED_TOKEN = jo.get("PRIVILEGED_TOKEN").toString();
+            
         }catch(NullPointerException e){
-            
+            PRIVILEGED_TOKEN = ""; autoSync = false; //serverAddress="http://localhost/";
             e.printStackTrace();
-        }
-        
-        if(jo.get("autoSync").toString().equalsIgnoreCase("true")){
-            autoSync = true;
-            
-        }else{
-            autoSync = false;
         }
         
         return jo;
@@ -219,10 +220,9 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            //processBuilder.command("bash", "-c", "rm ./files/*" + " &"); //On vide le dossier files //Commande Linux
-            //on supprime le dossier files et on le recree // processBuilder.command("cmd.exe", "/c", " rmdir /s /q files && mkdir files"); //Commande Windows
-            System.out.println("Commande: " + " del /s /q \".\\files\\*\"");
-            processBuilder.command("cmd.exe", "/c", " del /s /q \".\\files\\*\""); //On vide le dossier files //Commande Windows
+            //processBuilder.command("bash", "-c", "rm ./files/*" + " &");
+            //on vide le contenu du dossier files
+            processBuilder.command("cmd.exe", "/c", " del /q .\\files\\*");
 
             try{
                 Process process = processBuilder.start();
@@ -274,10 +274,7 @@ public class Moodleclient extends Application {
             
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            //processBuilder.command("bash", "-c", "xdg-open ./files/'" + fileName + "' &"); //Commande Linux
-            //processBuilder.command("cmd.exe", "/c", " cd files && "+fileName+" && cd ../"); //Commande Windows
-            System.out.println("Commande: " + "\"" + ".\\files\\" + fileName + "\"");
-            processBuilder.command("cmd.exe", "/c", "\"" + ".\\files\\" + fileName + "\""); //Commande Windows
+            processBuilder.command("cmd.exe", "/c", " \".\\files\\"+fileName+"\"");
 
             try{
                 Process process = processBuilder.start();

@@ -44,7 +44,6 @@ public class SubmitAssignmentController implements Initializable{
     @FXML
     private JFXButton btnCancel;
 
-
     @FXML
     private TextArea list;
 
