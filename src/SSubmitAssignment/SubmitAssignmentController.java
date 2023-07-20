@@ -32,36 +32,44 @@ import moodleclient.util.HibernateUtil;
 public class SubmitAssignmentController implements Initializable{
 	
 
-	    @FXML
-	    private Label courseName;
+    @FXML
+    private Label courseName;
 
-	    @FXML
-	    private JFXButton fileChooser;
+    @FXML
+    private JFXButton fileChooser;
 
-	    @FXML
-	    private JFXButton btnSave;
+    @FXML
+    private JFXButton btnSave;
 
-	    @FXML
-	    private JFXButton btnCancel;
+    @FXML
+    private JFXButton btnCancel;
 
-	    
-	    
-	   
-            @FXML
-            private TextArea list;
-	    
-            final FileChooser fc = new FileChooser();
+    @FXML
+    private TextArea list;
+
+    final FileChooser fc = new FileChooser();
+
     @FXML
     private Label devoirId;
     @FXML
     private ScrollPane scrollpane;
     
     private List<File> filesList = new ArrayList<File>();
+    private List devoirs;
+    private Devoirs devoir = null;
+    private boolean viewOnly = false; //On est en mode viewOnly lorsque le devoir est déjà noté
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
        // TODO Auto-generated method stub
-        
+       devoirs = Moodleclient.session.createQuery("from Devoirs D where D.id=" + Moodleclient.currentAssignmentId).list();
+       if(devoirs.size()>0){
+           devoir = (Devoirs) devoirs.get(0);
+           if(devoir.getNote() != null){
+               viewOnly = true;
+               fileChooser.setDisable(true); btnSave.setDisable(true); btnCancel.setDisable(true);
+           }
+       }
        loadSubmissions();
     }
 
@@ -82,18 +90,18 @@ public class SubmitAssignmentController implements Initializable{
         
         List<File> files = fc.showOpenMultipleDialog(null);
         
-        for (int i = 0; i< files.size(); i++){
             if (files != null){
-               list.appendText(files.get(i).getAbsoluteFile()+ "\n");
-               //filesList.getItems().add(files.get(i).getAbsolutePath());
-               
-               //append the file to the files List
-               filesList.add(files.get(i));
+                for (int i = 0; i< files.size(); i++){
+                    list.appendText(files.get(i).getAbsoluteFile()+ "\n");
+                    //filesList.getItems().add(files.get(i).getAbsolutePath());
+
+                    //append the file to the files List
+                    filesList.add(files.get(i));
+                }
                 
             }else{
                 System.out.println("File is invalid!");
             }
-        }
             
     }
     
@@ -106,15 +114,13 @@ public class SubmitAssignmentController implements Initializable{
             
             String hashName = file.getName();
             
-            CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'");
+            //CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'");
+            CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \"./files/" + hashName + "\"");
+
             commandRunner.start();
             
-            //save the file in the database
-            List devoirs = Moodleclient.session.createQuery("from Devoirs D where D.id=" + Moodleclient.currentAssignmentId).list();
-            
-            if(devoirs.size() > 0){
-                
-                Devoirs devoir = (Devoirs) devoirs.get(0);
+            //save the file in the database            
+            if(devoir != null){
                 
                 byte b = 0;
                 AssignmentSubmission subFile = new AssignmentSubmission(devoir, file.getName(), hashName, new Date(), new Date(), b);
@@ -179,13 +185,21 @@ public class SubmitAssignmentController implements Initializable{
 
                 //set the delete button
                 ImageView deleteImg = (ImageView) fileLoader.getNamespace().get("deleteBtn");
+                
+                if(viewOnly){
+                    //disable the delete button
+                    deleteImg.setDisable(true);
+                    deleteImg.setVisible(false);
+                }
 
                 deleteImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         //delete the current private file from the local storage
-                        CommandRunner deleteCommand = new CommandRunner("rm ./files/'" + asub.getHashName() + "'");
-
+                        //CommandRunner deleteCommand = new CommandRunner("rm ./files/'" + asub.getHashName() + "'");
+                        CommandRunner deleteCommand = new CommandRunner("del \".\\files\\" + asub.getHashName() + "\"");
+                        deleteCommand.start();
+                        
                         //delete the instance from the database
                         Moodleclient.session.beginTransaction();
 

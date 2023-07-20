@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="529.0" prefWidth="700.0" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SCourse.ManageCourseFilesController">
+   <children>
+      <VBox prefHeight="418.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane prefHeight="41.0" prefWidth="540.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;">
+               <children>
+                  <Label fx:id="title" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="453.0" style="-fx-background-color: FFFFFF;" text="Course name" textFill="#0a82c3">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" right="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </Pane>
+            <Label text="Course files">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="10.0" top="20.0" />
+               </VBox.margin>
+            </Label>
+            <AnchorPane prefHeight="200.0" prefWidth="700.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="428.0" prefWidth="700.0" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ScrollPane fx:id="scrollpane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="255.0" prefWidth="700.0" />
+                        <JFXTextArea fx:id="list" editable="false" prefHeight="118.0" prefWidth="700.0" style="-fx-border-color: D1D0CE; -fx-background-color: ffffff;" />
+                        <HBox alignment="CENTER" prefWidth="471.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <JFXButton fx:id="fileChooser" onAction="#handleBtnChooser" prefHeight="38.0" prefWidth="122.0" style="-fx-background-color: #DCDCDC;" text="Choose files">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="btnSave" onMouseClicked="#saveFiles" prefHeight="38.0" prefWidth="138.0" style="-fx-background-color: #357EC7;" text="Save changes" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="btnCancel" onMouseClicked="#cancel" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: #DCDCDC;" text="Cancel">
+                                 <HBox.margin>
+                                    <Insets left="210.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <Label fx:id="devoirId" text="Files submissions" visible="false">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

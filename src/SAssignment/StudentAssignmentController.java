@@ -37,6 +37,8 @@ public class StudentAssignmentController implements Initializable {
     @FXML
     private Label dueDate;
     @FXML
+    private Label gradeLabel;
+    @FXML
     private Label devoirId;
     
 
@@ -44,7 +46,8 @@ public class StudentAssignmentController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
-           
+           devoirId.setVisible(false);
+           gradeLabel.setText("");
     }
 
     @FXML

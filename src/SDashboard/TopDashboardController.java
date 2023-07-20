@@ -7,15 +7,7 @@ package SDashboard;
 
 import com.jfoenix.controls.JFXButton;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,29 +18,29 @@ import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import login.Dry;
 import moodleclient.LogOutAlertBox;
 import moodleclient.Moodleclient;
-import moodleclient.SyncAlertBox;
+import static moodleclient.Moodleclient.root;
 import moodleclient.exceptions.ServerUnreachableException;
 import moodleclient.helpers.CoursesHelper;
 import moodleclient.util.HibernateUtil;
-import org.hibernate.Session;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import moodleclient.SyncAlertBox;
 import moodleclient.entity.AssignmentSubmission;
@@ -80,6 +72,11 @@ public class TopDashboardController implements Initializable {
     private CoursesLoader courseLoader;
     private PrivateFilesLoader privateFileLoader;
     
+    //Le nombre de Threads qu'on lance lors de la synchronisation. Il y en a deux actuellement: CoursesLoader et PrivateFilesLoader
+    private int numberOfSyncThreads = 2;
+    
+    @FXML
+    private HBox moodleLayout;
     @FXML
     private JFXButton syncBtn;
     @FXML
@@ -94,6 +91,8 @@ public class TopDashboardController implements Initializable {
     private MenuItem syncMenu;
     @FXML
     private MenuItem logOutMenu;
+    @FXML
+    private Label teacherLabel;
 
     @FXML
     private Label syncingText;
@@ -103,6 +102,14 @@ public class TopDashboardController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //Mise en forme du Top dashboard en mode enseignant
+        if(!Moodleclient.user.isStudent()){
+            moodleLayout.setStyle("-fx-background-color:  #BBE0F2");  // #DCF2FF          
+        }
+        else{
+            teacherLabel.setVisible(false);
+        }
         
         new ConnectivityListenner().start();
         
@@ -133,34 +140,22 @@ public class TopDashboardController implements Initializable {
         
         if(this.isSyncing){
            
-            //upload modifications of the private files //UPLOADER LES FICHIERS PRIVES
+            //upload modifications of the private files
             Moodleclient.session.beginTransaction();
             
             List privateFiles = Moodleclient.session.createQuery("from PrivateFile PF where PF.synced=0").list();
             
-            /*petit test*/System.out.print("La taille de la liste est : "+privateFiles.size()+"\n");
             
             for(Object obj: privateFiles){
                 
                 PrivateFile privateFile = (PrivateFile) obj;
                 
-                //voyons le contenu de cet objet
-                /*petit test*/System.out.println("Contenu de l'objet obj : "+privateFile.getHashName());
-                
                 //build the url to update the file in the user's draft
-                //String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                //build the url to update the file in the user's draft
-                //Version Lening: //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
+                //String request = "cd files && curl -X POST -F \"file_1=@./" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken()+" && cd ../";
                 String request = "curl -X POST -F \"file_1=@./files/" + privateFile.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                /*petit test*/System.out.println(request);
-                
+
                 String requestResponse = new RequestCommand(request).runCommand();
-                
-                // Affichons un peu le resultat de cette commande
-                /*petit test*/System.out.println(requestResponse);
-                
+
                 //build the request to move the file to the private area of the user
                 JSONParser parser = new JSONParser();
                 
@@ -176,7 +171,7 @@ public class TopDashboardController implements Initializable {
                 System.out.println("###Requête 2###\n" + request2);
                 //CommandRunner command2 = new CommandRunner(request2); //Ancien code
                 //command2.start();
-                new RequestCommand(request2).runCommand(); //Nouveau
+                new RequestCommand(request2).runCommand(); //Nouveau code
                 
                 //set the current private file as uploaded
                 byte b = 1;
@@ -190,47 +185,52 @@ public class TopDashboardController implements Initializable {
             
             // FIN DE L'UPLOAD DES FICHIERS PRIVES
             
-            //upload the assignment submissions //UPLOADER LES SOUMISSIONS DE DEVOIRS
-            Moodleclient.session.beginTransaction();
+            //upload the assignment submissions //UPLOADER LES SOUMISSIONS DE DEVOIRS (On le fait seulement si on est en mode étudiant)
             
-            List submissions = Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.synced=0").list();
-            
-            for(Object obj: submissions){
+            if(Moodleclient.user.isStudent()){
                 
-                AssignmentSubmission submission = (AssignmentSubmission) obj;
+                Moodleclient.session.beginTransaction();
+
+                List submissions = Moodleclient.session.createQuery("from AssignmentSubmission sub where sub.synced=0").list();
+
+                for(Object obj: submissions){
+
+                    AssignmentSubmission submission = (AssignmentSubmission) obj;
+
+                    //build the url to update the file in the user's draft
+                    String request = "curl -X POST -F \"file_1=@./files/" + submission.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
+
+                    String requestResponse = new RequestCommand(request).runCommand();
+                    System.out.println(requestResponse);
+                    //build the request to move the file to the private area of the user
+                    JSONParser parser = new JSONParser();
+
+                    JSONArray jarr = (JSONArray) parser.parse(requestResponse);
+
+                    JSONObject jobj = (JSONObject) jarr.get(0);
+
+                    //move the file to the private files of the user
+                    //build the request
+                    String draftId = jobj.get("itemid").toString();
+
+                    String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data \"wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "\"" ;
+                    System.out.println(request2);
+
+                    String requestResponse2 = new RequestCommand(request2).runCommand();
+
+                    System.out.println(requestResponse2);
+
+                    //set the current private file as uploaded
+                    byte b = 1;
+
+                    submission.setSynced(b);
+
+                    Moodleclient.session.save(submission);
+                }
+
+                Moodleclient.session.getTransaction().commit();
                 
-                //build the url to update the file in the user's draft
-                String request = "curl -X POST -F \"file_1=@./files/" + submission.getHashName() + "\" " + moodleclient.Moodleclient.serverAddress + "webservice/upload.php?token=" + moodleclient.Moodleclient.user.getToken();
-                
-                String requestResponse = new RequestCommand(request).runCommand();
-                System.out.println(requestResponse);
-                //build the request to move the file to the private area of the user
-                JSONParser parser = new JSONParser();
-                
-                JSONArray jarr = (JSONArray) parser.parse(requestResponse);
-                
-                JSONObject jobj = (JSONObject) jarr.get(0);
-                
-                //move the file to the private files of the user
-                //build the request
-                String draftId = jobj.get("itemid").toString();
-                
-                String request2 = "curl " + moodleclient.Moodleclient.serverAddress +"webservice/rest/server.php?moodlewsrestformat=json --data \"wsfunction=mod_assign_save_submission&wstoken=" + moodleclient.Moodleclient.user.getToken() + "&assignmentid=" + submission.getDevoirs().getRemoteId() + "&plugindata[onlinetext_editor][text]=some_text&plugindata[onlinetext_editor][format]=1&plugindata[onlinetext_editor][itemid]=" + draftId + "&plugindata[files_filemanager]=" + draftId + "\"" ;
-                System.out.println(request2);
-                
-                String requestResponse2 = new RequestCommand(request2).runCommand();
-                
-                System.out.println(requestResponse2);
-                
-                //set the current private file as uploaded
-                byte b = 1;
-                
-                submission.setSynced(b);
-                
-                Moodleclient.session.save(submission);
             }
-            
-            Moodleclient.session.getTransaction().commit();
             
             // FIN DE L'UPLOAD DES SOUMISSIONS DE DEVOIRS
             
@@ -239,34 +239,49 @@ public class TopDashboardController implements Initializable {
             Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
             
             
-            //delete the downloaded files
+            // UPLOAD DES COURS, SECTIONS ET COURSEFILES NON SYNCHRONISES (Uniquement en mode enseignant)
+            
+            if(!Moodleclient.user.isStudent()){
+                
+                Moodleclient.session.beginTransaction();
+                
+                /* PLACER LE CODE ICI*/
+                CoursesHelper.uploadCourses();
+                
+                Moodleclient.session.getTransaction().commit();
+                Moodleclient.session.close();
+                Moodleclient.session = HibernateUtil.getSessionFactory().openSession();
+                
+            }
+            
+            // FIN DE L'UPLOAD DES COURS, SECTIONS ET COURSEFILES NON SYNCHRONISES
+            
+            
+            //DELETE THE DOWNLOADED FILES
             //new CommandRunner("rm ./files/*").start(); //Version Linux
             System.out.println("Commande:__" + "del /s /q \".\\files\\*\"");
             new CommandRunner("del /s /q \".\\files\\*\"").start();
             
+            //CLEAR THE DATABASE
             moodleclient.Moodleclient.clearLocalDatabase();
             
             this.syncingText.setVisible(true);
             
             this.rt.play();
             
+            //PULL COURSES, ASSIGNMENTS AND ASSIGNMENTS SUBMISSIONS
             this.courseLoader = new CoursesLoader();
             this.courseLoader.start();
             
+            //PULL PRIVATE FILES
             this.privateFileLoader = new PrivateFilesLoader();
             this.privateFileLoader.start();
             
             Tooltip toolTextSync = new Tooltip(stopSyncText);
             syncBtn.setTooltip(toolTextSync);
             
-        } else {
-            
-            this.syncingText.setVisible(false);
-            
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            syncBtn.setTooltip(toolTextSync); 
-            
-            this.rt.stop();
+        } else {            
+            this.stopSyncAnimation();
         }
     }
     
@@ -321,7 +336,6 @@ public class TopDashboardController implements Initializable {
                         }
 
                     } catch (IOException ex) {
-
                         ex.printStackTrace();
                     }
                 }
@@ -333,45 +347,28 @@ public class TopDashboardController implements Initializable {
     //function to update the application list of courses
     public void updateCoursesList() throws IOException{
         
-        this.syncDone++;
-        
-        if(syncDone == 2){
-            this.syncingText.setVisible(false);
-            this.rt.stop();
-
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            this.syncBtn.setTooltip(toolTextSync);
-        }
-        
         Moodleclient.session.beginTransaction();
         
         Moodleclient.courses =  Moodleclient.session.createQuery("from Cours").list();
         
         Moodleclient.session.getTransaction().commit();
         
+        
+       this.checkIfSyncEnded();
+        
     }
     
     //function to update the application list of private files
     public void updatePrivateFilesList() throws IOException{
-        
-        this.syncDone++;
-        
-        if(syncDone == 2){
-            this.syncingText.setVisible(false);
-            this.rt.stop();
 
-            Tooltip toolTextSync = new Tooltip(startSyncText);
-            this.syncBtn.setTooltip(toolTextSync);
-        }
-        
-        
-        //Moodleclient.session.getTransaction().commit(); //Ajouté par DJOUMESSI
-        
         Moodleclient.session.beginTransaction();
         
         Moodleclient.privateFiles =  Moodleclient.session.createQuery("from PrivateFile").list();
         
         Moodleclient.session.getTransaction().commit();
+        
+        
+        this.checkIfSyncEnded();
     }
     
     //function to pull and display courses
@@ -396,10 +393,11 @@ public class TopDashboardController implements Initializable {
                 coursesHlpr.saveCourses(courses, assignments);
                 
                 updateCoursesList();
+                System.out.println("THREAD COURSES AND ASSIGNMENTS TERMINE");
                 
-            } catch (IOException ex) {
-                
+            } catch (IOException ex) {                
                 ex.printStackTrace();
+                handleSyncError("CoursesLoader"); //On indique le thread à l'origine de l'exception
                 
             } catch (ParseException ex) {
                 
@@ -431,6 +429,7 @@ public class TopDashboardController implements Initializable {
                 privateFileHelper.pullPrivateFiles();
                 
                 updatePrivateFilesList();
+                System.out.println("THREAD PRIVATEFILES TERMINE");
                 
             } catch (ParseException ex) {
                 
@@ -447,8 +446,64 @@ public class TopDashboardController implements Initializable {
             } catch (IOException ex) {
                 
                 ex.printStackTrace();
+                handleSyncError("PrivateFilesLoader"); //On indique le thread à l'origine de l'exception
             }
         }
+    }
+    
+    
+    //Vérifie si la synchronisation est terminée, et effectue certaines actions si oui
+    public void checkIfSyncEnded(){
+        this.syncDone++;
+        
+        if(syncDone == this.numberOfSyncThreads){//On a fini avec tous les Threads lancés, donc la SYNCHRONISATION TERMINEE, ON RAFRAÎCHIT LA PAGE
+            
+            this.stopSyncAnimation();
+            
+            // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+            Platform.runLater(
+              () -> {
+                try {
+                    System.out.println("SYNCHRO TERMINEE");
+                    new Dry().showDashboard(root);
+                } catch (IOException ex) {
+                    Logger.getLogger(TopDashboardController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+              }
+            );
+            
+        }
+    }
+    
+    public void stopSyncAnimation(){
+            this.syncingText.setVisible(false);
+            
+            Tooltip toolTextSync = new Tooltip(startSyncText);
+            this.syncBtn.setTooltip(toolTextSync);
+            
+            this.rt.stop();
+    }
+    
+    //Cette fonction est exécuteée lorsqu'une exception IOException survient lors de la synchronisation
+    //Cela arrive souvent lorsque le serveur est injoignable (bouton de connectivité au ROUGE)
+    public void handleSyncError(String threadName){
+        
+        Platform.runLater(() -> {
+            //GUI STUFF
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Sync error - " + threadName);
+            alert.setHeaderText("Something went wrong when synchronizing");
+            alert.setContentText("UN PROBLEME EST SURVENU LORS DE LA SYNCHRONISATION. IL SE POURRAIT QUE LE SERVEUR SOIT INGNOIGNABLE."
+                    + "\nBIEN VOULOIR REESSAYER PLUS TARD (S'assurer que le bouton de connectivité est VERT)");
+
+            alert.showAndWait();
+            
+            //La synchronisation a échoué, on reset les variables associées et on arrête l'animation
+            this.syncDone = 0;        
+            this.isSyncing = false;
+            this.stopSyncAnimation();
+        });
+        
     }
     
 }

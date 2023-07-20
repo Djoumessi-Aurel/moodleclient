@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TAssignment.TeacherAssignmentController">
+   <children>
+      <Pane prefHeight="41.0" prefWidth="523.0" style="-fx-background-color: FFFFFF; -fx-border-color: D1D0CE;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0">
+         <children>
+            <Label fx:id="topicName" contentDisplay="CENTER" layoutX="2.0" layoutY="3.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: FFFFFF;" text="Topic 2" textFill="#0a82c3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="devoirId" contentDisplay="CENTER" layoutX="577.0" layoutY="3.0" prefHeight="36.0" prefWidth="11.0" style="-fx-background-color: FFFFFF;" textFill="#0a82c3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </Pane>
+      <VBox prefHeight="350.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <AnchorPane prefHeight="340.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox layoutY="52.0" prefHeight="348.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
+                     <children>
+                        <Label text="Assignment details" textFill="#101111">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="20.0" />
+                           </VBox.margin>
+                        </Label>
+                        <GridPane fx:id="gridpane" maxWidth="1.7976931348623157E308">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="313.0" minWidth="0.0" prefWidth="313.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="371.0" minWidth="0.0" prefWidth="267.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <AnchorPane prefWidth="200.0" style="-fx-background-color: #F5F5F5;">
+                                 <children>
+                                    <Label text="Open date: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #F5F5F5;" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label fx:id="openDate" text="Sunday, 28 November 2021, 12:00 AM">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefWidth="200.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label prefHeight="30.0" prefWidth="225.0" style="-fx-background-color: #FBFBF9;" text="Due date: " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: #FBFBF9;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label fx:id="dueDate" text="Sunday, 28 November 2021, 12:00 AM">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </VBox.margin>
+                        </GridPane>
+                        <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

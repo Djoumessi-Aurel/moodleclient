@@ -20,6 +20,10 @@ public class Devoirs  implements java.io.Serializable {
      private String remoteId;
      private Date createdAt;
      private Date updatedAt;
+     private Integer note = null; //la note obtenue
+     private Integer noteMax = null; //sur combien est noté le devoir
+     private Byte noteVue = 0; //l'étudiant a vu sa note (1) ou pas (0)
+     private Byte ignored = 0; //l'étudiant a ignoré la notification de devoir (1) ou pas (0)
      private Set ressourceDevoirs = new HashSet(0);
      private Set assignmentSubmissions = new HashSet(0);
 
@@ -113,7 +117,37 @@ public class Devoirs  implements java.io.Serializable {
         this.assignmentSubmissions = assignmentSubmissions;
     }
 
+    public Integer getNote() {
+        return note;
+    }
 
+    public void setNote(Integer note) {
+        this.note = note;
+    }
+
+    public Integer getNoteMax() {
+        return noteMax;
+    }
+
+    public void setNoteMax(Integer noteMax) {
+        this.noteMax = noteMax;
+    }
+
+    public Byte getNoteVue() {
+        return noteVue;
+    }
+
+    public void setNoteVue(Byte noteVue) {
+        this.noteVue = noteVue;
+    }
+
+    public Byte getIgnored() {
+        return ignored;
+    }
+
+    public void setIgnored(Byte ignored) {
+        this.ignored = ignored;
+    }
 
 
 }

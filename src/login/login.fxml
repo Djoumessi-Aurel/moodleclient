@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
    <children>
       <VBox alignment="CENTER" layoutX="1.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -57,21 +58,31 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER">
-               <children>
-                  <Label fx:id="errMsg" alignment="CENTER" style="-fx-background-color: #F7453F;" text="Your username or password is wrong" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets bottom="20.0" top="10.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
+            <VBox>
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
-            </HBox>
+               <children>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="errMsg" alignment="CENTER" style="-fx-background-color: #F7453F;" text="Your username or password is wrong" textFill="WHITE">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="informLabel" alignment="CENTER" text="Trying to connect. Please wait..." textFill="#02bf02">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -81,6 +92,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -97,8 +109,8 @@
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <JFXTextField fx:id="usernameInput" GridPane.columnIndex="1" />
-                        <JFXTextField fx:id="passwordInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <JFXTextField fx:id="usernameInput" onAction="#handleLoginBtn" GridPane.columnIndex="1" />
+                        <JFXPasswordField fx:id="passwordInput" onAction="#handleLoginBtn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="You are a : " GridPane.rowIndex="3" />
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
@@ -113,6 +125,7 @@
                               <JFXRadioButton fx:id="teacherRadio" text="Teacher" toggleGroup="$userRole" />
                            </children>
                         </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -136,6 +149,7 @@
                   </JFXButton>
                </children>
             </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
          </children>
       </VBox>
    </children>

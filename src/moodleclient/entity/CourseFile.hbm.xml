@@ -23,5 +23,8 @@
         <property name="updatedAt" type="timestamp">
             <column name="updatedAt" length="19" />
         </property>
+        <property name="synced" type="java.lang.Byte">
+            <column name="synced" />
+        </property>
     </class>
 </hibernate-mapping>

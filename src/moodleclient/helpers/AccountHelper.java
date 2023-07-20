@@ -88,12 +88,13 @@ public class AccountHelper {
                 // Ayant recuperer le token, on va l'utiliser pour avoir le remotId
                 String url = serverAdd + "webservice/rest/server.php?wstoken="+user_token+"&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json"; // ajout de ma part pour recuperer le remoteid
                 remote_id = RemoteId.getRemoteId(url);
-                System.out.println("remote_id : "+ remote_id);
-                //
+                //System.out.println("remote_id : "+ remote_id);
                 
                 result.put("token", user_token);
                 result.put("remoteid", remote_id);
-                System.out.println("Utilisateur récupéré: " + result.toString());
+
+                //System.out.println("Utilisateur récupéré: " + result.toString());
+
                 //result.put("remoteid", jobj.get("remoteid").toString());
                 
             }else{

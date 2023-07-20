@@ -42,7 +42,8 @@ public class SPrivateFilesController_1 implements Initializable{
     @FXML
     private JFXTextArea list;
 
-                final FileChooser fc = new FileChooser();
+    final FileChooser fc = new FileChooser();
+
     @FXML
     private JFXButton fileChooser;
     @FXML
@@ -80,17 +81,17 @@ public class SPrivateFilesController_1 implements Initializable{
         
         if(files != null){
             for (int i = 0; i< files.size(); i++){
+
                list.appendText(files.get(i).getAbsoluteFile()+ "\n");
                //filesList.getItems().add(files.get(i).getAbsolutePath());
                
                //append the file to the files List
-               filesList.add(files.get(i));
-                
+               filesList.add(files.get(i));                
             }
         }
         else{
-            System.out.println("File is invalid!");
-        }
+                System.out.println("File is invalid!");
+            }
             
     }
     
@@ -98,15 +99,19 @@ public class SPrivateFilesController_1 implements Initializable{
     public void saveFiles() throws IOException{
         
         Moodleclient.session.beginTransaction();
+
         System.out.println("Entrée dans la fonction de sauvegarde de fichiers privés");
+
         
         for(Object obj: filesList){
             File file = (File)obj;
             
             String hashName = file.getName();
+
             //CommandRunner commandRunner = new CommandRunner("cp '" + file.getAbsoluteFile() + "' ./files/'" + hashName + "'"); //Code Linux
             System.out.println("Commande: " + "copy \"" + file.getAbsoluteFile() + "\" \".\\files\\" + hashName + "\"");
             CommandRunner commandRunner = new CommandRunner("copy \"" + file.getAbsoluteFile() + "\" \".\\files\\" + hashName + "\"");
+
             commandRunner.start();
             
             //save the file in the database
@@ -140,8 +145,9 @@ public class SPrivateFilesController_1 implements Initializable{
         list.setText("");
     }
     
-    //fonction to load and display the private files
+     //fonction to load and display the private files
     public void loadPrivateFiles(){
+
         if(moodleclient.Moodleclient.privateFiles.size() > 0){
 
             try {
@@ -212,6 +218,7 @@ public class SPrivateFilesController_1 implements Initializable{
         else{ //Si la liste des fichiers privés est vide
             this.scrollpane.setContent(new GridPane());
         }
+
     }
 
 }

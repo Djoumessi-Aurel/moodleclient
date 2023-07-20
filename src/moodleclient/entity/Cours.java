@@ -14,12 +14,15 @@ public class Cours  implements java.io.Serializable {
 
      private Integer id;
      private String nom;
+     private String nomAbrege;
      private String description;
      private String remoteId;
      private Date createdAt;
      private Date updatedAt;
      private Set sectionses = new HashSet(0);
      private Set devoirses = new HashSet(0);
+     private Byte synced;
+
 
     public Cours() {
     }
@@ -28,14 +31,24 @@ public class Cours  implements java.io.Serializable {
     public Cours(String remoteId) {
         this.remoteId = remoteId;
     }
-    public Cours(String nom, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses) {
+    
+    //Ce constructeur servira uniquement à récupérer les données saisies dans le formulaire de création/modification de cours
+    public Cours(String nom, String nomAbrege, String description){
+        this.nom = nom;
+        this.nomAbrege = nomAbrege;
+        this.description = description;
+    }
+    
+    public Cours(String nom, String nomAbrege, String description, String remoteId, Date createdAt, Date updatedAt, Set sectionses, Set devoirses, Byte synced) {
        this.nom = nom;
+       this.nomAbrege = nomAbrege;
        this.description = description;
        this.remoteId = remoteId;
        this.createdAt = createdAt;
        this.updatedAt = updatedAt;
        this.sectionses = sectionses;
        this.devoirses = devoirses;
+       this.synced = synced;
     }
    
     public Integer getId() {
@@ -54,6 +67,14 @@ public class Cours  implements java.io.Serializable {
     }
     public String getDescription() {
         return this.description;
+    }
+    
+    public String getNomAbrege() {
+        return nomAbrege;
+    }
+
+    public void setNomAbrege(String nomAbrege) {
+        this.nomAbrege = nomAbrege;
     }
     
     public void setDescription(String description) {
@@ -94,8 +115,14 @@ public class Cours  implements java.io.Serializable {
     public void setDevoirses(Set devoirses) {
         this.devoirses = devoirses;
     }
+    
+    public Byte getSynced() {
+        return synced;
+    }
 
-
+    public void setSynced(Byte synced) {
+        this.synced = synced;
+    }
 
 
 }

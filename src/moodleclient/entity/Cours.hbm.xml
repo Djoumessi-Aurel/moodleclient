@@ -11,6 +11,9 @@
         <property name="nom" type="string">
             <column name="nom" />
         </property>
+        <property name="nomAbrege" type="string">
+            <column name="nom_abrege" />
+        </property>
         <property name="description" type="string">
             <column name="description" />
         </property>
@@ -35,5 +38,8 @@
             </key>
             <one-to-many class="moodleclient.entity.Devoirs" />
         </set>
+        <property name="synced" type="java.lang.Byte">
+            <column name="synced" />
+        </property>
     </class>
 </hibernate-mapping>
